@@ -119,7 +119,6 @@ const GridView = ({ data }) => {
                           width: "100%",
                           borderRadius: 10,
                           padding: 5,
-                          margin: 10,
                         },
                       ]}
                       onPress={() => {
