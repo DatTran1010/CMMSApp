@@ -7,6 +7,9 @@ import {
   LayoutAnimation,
   Keyboard,
   Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  FlatList,
 } from "react-native";
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -181,57 +184,54 @@ const MyEcomaint = () => {
   };
 
   return (
-    <View
-      style={{ flex: 1 }}
-      onStartShouldSetResponder={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <Animated.View
-        style={[
-          styles.arrowView,
-          {
-            transform: [
-              {
-                rotate: spin,
-              },
-            ],
-          },
-        ]}
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <View
+        style={{ flex: 1 }}
+        onStartShouldSetResponder={() => {
+          Keyboard.dismiss();
+        }}
       >
-        <Ionicons onPress={handleArrow} name="chevron-up-outline" size={25} />
-      </Animated.View>
-      {hideArrow && (
-        <>
-          <View style={styles.filterCenter} contentContainerStyle={{ flex: 1 }}>
+        <Animated.View
+          style={[
+            styles.arrowView,
+            {
+              transform: [
+                {
+                  rotate: spin,
+                },
+              ],
+            },
+          ]}
+        >
+          <Ionicons onPress={handleArrow} name="chevron-up-outline" size={25} />
+        </Animated.View>
+        {hideArrow && (
+          <View style={styles.filterCenter}>
             <View style={styles.dropDown}>
-              <View style={{ marginBottom: 55 }}>
-                <DropDown data={dataDiaDiem} placeholder="Chọn địa điểm" />
-              </View>
-              <View style={{ marginBottom: 55 }}>
-                <DropDown data={dataDiaDiem} placeholder="Loại thiết bị" />
-              </View>
+              <DropDown data={dataDiaDiem} placeholder="Chọn địa điểm" />
+              <DropDown data={dataDiaDiem} placeholder="Loại thiết bị" />
               <CalendarCustom />
             </View>
           </View>
-        </>
-      )}
+        )}
 
-      <View style={styles.searchView}>
-        <CustomTextInput placeholder={""} />
-        <TouchableOpacity
-          style={[styles.barcodeView, { top: hideArrow ? 0 : 7 }]}
-        >
-          <Image
-            style={styles.barcode}
-            source={require("../../../assets/barcode.png")}
-          />
-        </TouchableOpacity>
+        <View style={styles.searchView}>
+          <CustomTextInput placeholder={""} />
+          <TouchableOpacity
+            style={[styles.barcodeView, { top: hideArrow ? 0 : 7 }]}
+          >
+            <Image
+              style={styles.barcode}
+              source={require("../../../assets/barcode.png")}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.gridView}>
+          <GridView data={tableData} />
+        </View>
       </View>
-      <View style={{ flex: 8, zIndex: -1 }}>
-        <GridView data={tableData} />
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -247,17 +247,18 @@ const styles = StyleSheet.create({
   },
 
   dropDown: {
+    flex: 1,
     marginHorizontal: 10,
     marginVertical: 15,
   },
   searchView: {
-    zIndex: -1,
     flex: 1,
     marginHorizontal: 10,
     marginBottom: 5,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: -1,
   },
   barcodeView: {
     position: "absolute",
@@ -266,5 +267,10 @@ const styles = StyleSheet.create({
   barcode: {
     width: 40,
     height: 40,
+  },
+
+  gridView: {
+    flex: 8,
+    zIndex: -1,
   },
 });

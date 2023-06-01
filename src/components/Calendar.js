@@ -6,6 +6,7 @@ import {
   TextInput,
   Keyboard,
   ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -50,7 +51,6 @@ const CalendarCustom = () => {
         <View
           style={{
             display: "flex",
-            position: "relative",
             top: 5,
             left: 0,
             right: 0,
