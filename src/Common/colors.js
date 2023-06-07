@@ -3,5 +3,6 @@ export default {
     buttoncolor: "#f57c00",
     white: "#FFFFFF",
     black: "#222222",
-    backgroundColor: "#E5E5E5",
+    border: "#ced4da",
+    backgroundColor: "#FFFFFF", //"#E5E5E5"
 };
