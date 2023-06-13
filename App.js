@@ -68,7 +68,7 @@ export default function App() {
             >
                 <NavigationContainer>
                     <Stack.Navigator defaultScreenOptions={Home}>
-                        {/* <Stack.Screen
+                        <Stack.Screen
                             name="Login"
                             component={Login}
                             options={{
@@ -80,7 +80,7 @@ export default function App() {
                             name="Home"
                             component={DrawerNavigator}
                             options={{ headerShown: false }}
-                        /> */}
+                        />
                         <Stack.Screen
                             name="Request"
                             component={Request}

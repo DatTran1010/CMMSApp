@@ -22,8 +22,21 @@ import {
     windowHeight,
     heightTextInput,
 } from "../../Common/dimentions";
+import callApi from ".././../ConText/api.js";
+
+const fetchData = async () => {
+    const endpoint = "/api/account/get-empploy";
+    const params = {
+        employeeCode: "0003",
+        password: "123456",
+    };
+    const method = "POST";
+    const response = await callApi(endpoint, params, method);
+};
+
 const Login = ({ navigation }) => {
     const handleLogin = () => {
+        fetchData();
         navigation.navigate("Home");
     };
 
