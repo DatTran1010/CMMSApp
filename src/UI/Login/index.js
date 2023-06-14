@@ -5,14 +5,13 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Keyboard,
-    TouchableWithoutFeedback,
     Image,
-    KeyboardAvoidingView,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Checkbox from "expo-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useDispatch } from "react-redux";
 
 import colors from "../../Common/colors";
 import globalstyle from "../../Common/globalstyle";
@@ -23,21 +22,33 @@ import {
     heightTextInput,
 } from "../../Common/dimentions";
 import callApi from ".././../ConText/api.js";
-
-const fetchData = async () => {
-    const endpoint = "/api/account/get-empploy";
-    const params = {
-        employeeCode: "0003",
-        password: "123456",
-    };
-    const method = "POST";
-    const response = await callApi(endpoint, params, method);
-};
+import { MainConText } from "../../ConText/MainContext";
 
 const Login = ({ navigation }) => {
-    const handleLogin = () => {
-        fetchData();
-        navigation.navigate("Home");
+    const { token, setToken } = useContext(MainConText);
+    const dispatch = useDispatch();
+
+    const handleLogin = async () => {
+        const endpoint = "/api/account/get-empploy";
+        const params = null;
+        const method = "GET";
+        const data = null;
+        // dispatch({ type: "SET_OVERLAY", payload: true });
+        // setOverLay(true);
+        const response = await callApi(
+            endpoint,
+            params,
+            method,
+            data,
+            token,
+            dispatch
+        );
+        // dispatch({ type: "SET_OVERLAY", payload: false });
+        // setOverLay(false);
+        if (token === "") {
+            setToken(response.data.responseData.token);
+        }
+        console.log(response);
     };
 
     return (
