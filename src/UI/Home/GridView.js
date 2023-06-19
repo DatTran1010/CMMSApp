@@ -5,28 +5,20 @@ import {
     TouchableOpacity,
     StyleSheet,
     TouchableNativeFeedback,
-    ScrollView,
-    Animated,
-    LayoutAnimation,
-    Image,
-    KeyboardAvoidingView,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import colors from "../../Common/colors";
 import { windowHeight } from "../../Common/dimentions";
-import HeaderMyEcomaint from "./HeaderMyEcomaint";
 const GridView = ({ data }) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const columnsName = () => (
         <View style={{ flex: 1 }}>
-            <HeaderMyEcomaint />
             <View
                 style={{
                     flex: 1,
-                    zIndex: -1,
                     flexDirection: "row",
                     alignContent: "center",
                     height: windowHeight / 25,
@@ -76,7 +68,7 @@ const GridView = ({ data }) => {
         setTooltipPosition({ x: pageX, y: pageY });
         setVisibleToolTip(true);
         setFocusIndex(index);
-        setContentToolTip(item.GHI_CHU);
+        setContentToolTip(item.teN_MAY);
     };
 
     const unHandleRowGrid = () => {
@@ -156,35 +148,38 @@ const GridView = ({ data }) => {
                                             ...styles.columnRowTxt,
                                         }}
                                     >
-                                        {item.MA}
+                                        {item?.mS_MAY}
                                     </Text>
                                 </View>
                                 <View style={styles.columnValue}>
                                     <TouchableOpacity style={{ flex: 1 }}>
                                         <Text style={styles.columnRowTxt}>
-                                            {item.YEU_CAU === 1 && (
-                                                <Ionicons
-                                                    name={"checkmark"}
-                                                    size={20}
-                                                    color={colors.primary}
-                                                />
-                                            )}
+                                            {item.listYC &&
+                                                item.listYC[0]?.duyeT_YC ===
+                                                    1 && (
+                                                    <Ionicons
+                                                        name={"checkmark"}
+                                                        size={20}
+                                                        color={colors.primary}
+                                                    />
+                                                )}
                                         </Text>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1 }}>
                                         <Text style={styles.columnRowTxt}>
-                                            {item.PHIEU_BR === 1 && (
-                                                <Ionicons
-                                                    name={"checkmark"}
-                                                    size={20}
-                                                    color={colors.primary}
-                                                />
-                                            )}
+                                            {item.listBT &&
+                                                item.listBT[0]?.hH_BT === 1 && (
+                                                    <Ionicons
+                                                        name={"checkmark"}
+                                                        size={20}
+                                                        color={colors.primary}
+                                                    />
+                                                )}
                                         </Text>
                                     </View>
                                     <TouchableOpacity style={{ flex: 1 }}>
                                         <Text style={styles.columnRowTxt}>
-                                            {item.GSTT === 1 && (
+                                            {item.tregs === 2 && (
                                                 <Ionicons
                                                     name={"checkmark"}
                                                     size={20}

@@ -15,170 +15,225 @@ import {
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DatePicker from "react-native-modern-datepicker";
+import Toast from "react-native-toast-message";
 
 import colors from "../../Common/colors";
-import { windowHeight } from "../../Common/dimentions";
+import { windowHeight, heightTextInput } from "../../Common/dimentions";
 import DropDown from "../../components/DropDown";
 
 import CustomTextInput from "../../components/TextInput";
 import GridView from "./GridView";
 
 import CalendarCustom from "../../components/Calendar";
+import callApi from "../../ConText/api";
+import { useDispatch } from "react-redux";
+import { MainConText } from "../../ConText/MainContext";
+import HeaderMyEcomaint from "./HeaderMyEcomaint";
 
 const MyEcomaint = () => {
-    const [tableData, setTableData] = useState([
-        {
-            ID: 1,
-            MA: "10-08-SEC-003-01",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GTSS: 0,
-            GHI_CHU: "Máy lạnh 2",
-        },
-        {
-            ID: 2,
-            MA: "10-08-WAT-001-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 1,
-            GHI_CHU: "Máy lạnh 3",
-        },
-        {
-            ID: 3,
-            MA: "10-08-LIG-003-00",
-            YEU_CAU: 1,
-            PHIEU_BR: 0,
-            GSTT: 1,
-            GHI_CHU: "Máy lạnh 4",
-        },
-        {
-            ID: 4,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 0,
-            GSTT: 0,
-            GHI_CHU: "Bag filter 1",
-        },
-        {
-            ID: 5,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 1,
-            PHIEU_BR: 0,
-            GSTT: 1,
-            GHI_CHU: "Bag filter and system Fan Cassava",
-        },
-        {
-            ID: 6,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 1,
-            GHI_CHU: "Hệ thống lọc bụi JT05 (Máy nghiền H01)",
-        },
-        {
-            ID: 7,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 1,
-            PHIEU_BR: 0,
-            GSTT: 1,
-            GHI_CHU: "Tủ điện lò hơi",
-        },
-        {
-            ID: 8,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 1,
-            GHI_CHU: "Coare Grinding 502",
-        },
-        {
-            ID: 9,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 1,
-            PHIEU_BR: 1,
-            GSTT: 1,
-            GHI_CHU: "Máy nghiền búa HM01",
-        },
-        {
-            ID: 10,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-        {
-            ID: 11,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-        {
-            ID: 12,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-        {
-            ID: 13,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-        {
-            ID: 14,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-        {
-            ID: 15,
-            MA: "10-06-OVH-003-00",
-            YEU_CAU: 0,
-            PHIEU_BR: 1,
-            GSTT: 0,
-            GHI_CHU: "Máy nghiền búa HM02",
-        },
-    ]);
+    const dispatch = useDispatch();
+    const { token } = useContext(MainConText);
+
+    const [dataDiaDiem, setDataDiaDiem] = useState([{}]);
+    const [dataMachine, setDataMachine] = useState([{}]);
+    const [date, setDate] = useState(new Date());
+
+    const setDateDNgay = (date) => {
+        setDate(date);
+    };
+    const getComboLocation = async () => {
+        const endpoint = "/api/home/get-location";
+        const method = "GET";
+        const params = {
+            UName: "admin",
+            NNgu: 0,
+            CoAll: 1,
+        };
+
+        const response = await callApi(
+            dispatch,
+            endpoint,
+            method,
+            null,
+            token,
+            params
+        );
+        setDataDiaDiem(response.data.responseData);
+    };
+
+    const getComboMachine = async () => {
+        const endpoint = "/api/home/get-machine";
+        const method = "GET";
+        const params = {
+            UName: "admin",
+            NNgu: 0,
+            CoAll: 1,
+        };
+
+        const response = await callApi(
+            dispatch,
+            endpoint,
+            method,
+            null,
+            token,
+            params
+        );
+        setDataMachine(response.data.responseData);
+    };
+
+    const getDataGridView = async () => {
+        const endpoint = "/api/home/get-myecomaint";
+        const method = "GET";
+        const params = {
+            username: "admin",
+            languages: 0,
+            dngay: "06/16/2023",
+            ms_nx: -1,
+            mslmay: -1,
+            xyly: 1,
+            pageIndex: 0,
+            pageSize: 0,
+        };
+
+        const response = await callApi(
+            dispatch,
+            endpoint,
+            method,
+            null,
+            token,
+            params
+        );
+        setTableData(response.data.responseData);
+        console.log(response.data.responseData);
+    };
+    useEffect(() => {
+        getComboLocation();
+        getComboMachine();
+        getDataGridView();
+    }, []);
+    const [tableData, setTableData] = useState([{}]);
+    const [hideArrow, setHideArrow] = useState(false);
+    const spinArrowValue = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(spinArrowValue, {
+            toValue: hideArrow ? 0 : 1,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    }, [hideArrow, spinArrowValue]);
+
+    const spin = spinArrowValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ["0deg", "180deg"],
+    });
+
+    const handleArrow = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setHideArrow((pre) => !pre);
+    };
     return (
         <View
-            style={{ flex: 1, alignItems: "center" }}
+            style={{ flex: 1, backgroundColor: colors.backgroundColor }}
             // onStartShouldSetResponder={() => {
             //     Keyboard.dismiss();
             // }}
         >
+            <Animated.View
+                style={[
+                    styles.arrowView,
+                    {
+                        transform: [
+                            {
+                                rotate: spin,
+                            },
+                        ],
+                    },
+                ]}
+            >
+                <Ionicons
+                    onPress={handleArrow}
+                    name="chevron-up-outline"
+                    size={25}
+                />
+            </Animated.View>
+            {hideArrow && (
+                <View style={styles.filterCenter}>
+                    <View style={styles.controlHeader}>
+                        <View style={styles.filter}>
+                            <DropDown
+                                placeholder={"Địa điểm"}
+                                data={dataDiaDiem}
+                                labelField={"teN_N_XUONG"}
+                                valueField={"mS_N_XUONG"}
+                            />
+                        </View>
+                        <View style={styles.filter}>
+                            <DropDown
+                                placeholder={"Thiết bị"}
+                                data={dataMachine}
+                                valueField={"mS_LOAI_MAY"}
+                                labelField={"teN_LOAI_MAY"}
+                            />
+                        </View>
+                        <View
+                            style={[
+                                styles.filter,
+                                { marginBottom: windowHeight / 60 },
+                            ]}
+                        >
+                            <CalendarCustom
+                                date={date}
+                                setDateDNgay={setDateDNgay}
+                                placeholder={"Đến ngày"}
+                            />
+                        </View>
+                    </View>
+                </View>
+            )}
+            <View
+                style={[styles.filter, { marginHorizontal: 10, marginTop: 5 }]}
+            >
+                <CustomTextInput placeholder={""} height={heightTextInput} />
+                <TouchableOpacity style={[styles.barcodeView]}>
+                    <Image
+                        style={styles.barcode}
+                        source={require("../../../assets/barcode.png")}
+                    />
+                </TouchableOpacity>
+            </View>
             <View style={styles.gridView}>
                 <GridView data={tableData} />
             </View>
             <View
                 style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
+                    width: "100%",
                     alignItems: "center",
-                    backgroundColor: colors.backgroundColor,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    marginVertical: 10,
-                    width: "70%",
-                    borderRadius: 5,
+                    justifyContent: "center",
                 }}
             >
-                <TouchableOpacity>
-                    <Ionicons name="chevron-back-outline" size={30} />
-                </TouchableOpacity>
-                <Text>1 of 137</Text>
-                <TouchableOpacity>
-                    <Ionicons name="chevron-forward-outline" size={30} />
-                </TouchableOpacity>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        backgroundColor: colors.backgroundColor,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                        marginVertical: 10,
+                        width: "70%",
+
+                        borderRadius: 5,
+                    }}
+                >
+                    <TouchableOpacity>
+                        <Ionicons name="chevron-back-outline" size={30} />
+                    </TouchableOpacity>
+                    <Text>1 of 137</Text>
+                    <TouchableOpacity>
+                        <Ionicons name="chevron-forward-outline" size={30} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -189,16 +244,11 @@ export default MyEcomaint;
 const styles = StyleSheet.create({
     filterCenter: {
         flex: 4,
+        marginHorizontal: 10,
     },
     arrowView: {
         justifyContent: "center",
         alignItems: "center",
-    },
-
-    dropDown: {
-        flex: 1,
-        marginHorizontal: 10,
-        marginVertical: 15,
     },
     searchView: {
         flex: 1,
@@ -207,7 +257,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: -1,
     },
     barcodeView: {
         position: "absolute",
@@ -220,6 +269,5 @@ const styles = StyleSheet.create({
 
     gridView: {
         flex: 8,
-        zIndex: -1,
     },
 });

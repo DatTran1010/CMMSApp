@@ -1,16 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import {
-    TouchableNativeFeedback,
-    Keyboard,
-    View,
-    ScrollView,
-    KeyboardAvoidingView,
-} from "react-native";
+import { Keyboard, View } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Provider } from "react-redux";
+import Toast from "react-native-toast-message";
 
 import Login from "./src/UI/Login";
 import Visual from "./src/UI/Visual";
@@ -66,9 +61,9 @@ export default function App() {
                     style={{
                         flex: 1,
                     }}
-                    onStartShouldSetResponder={() => {
-                        Keyboard.dismiss();
-                    }}
+                    // onStartShouldSetResponder={() => {
+                    //     Keyboard.dismiss();
+                    // }}
                 >
                     <NavigationContainer>
                         <Stack.Navigator defaultScreenOptions={Home}>
@@ -94,6 +89,7 @@ export default function App() {
                     </NavigationContainer>
                     <ModalUser />
                     <Overlay />
+                    <Toast />
                 </View>
             </ConTextProvider>
         </Provider>

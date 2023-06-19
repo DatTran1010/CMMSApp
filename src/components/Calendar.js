@@ -1,14 +1,15 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Keyboard } from "react-native";
 import React, { useState, useContext } from "react";
-import { Calendar, LocaleConfig } from "react-native-calendars";
-import DatePicker from "react-native-modern-datepicker";
+// import { Calendar, LocaleConfig } from "react-native-calendars";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 
 import colors from "../Common/colors";
 import { windowHeight } from "../Common/dimentions";
-const CalendarCustom = ({ placeholder, ...props }) => {
+const CalendarCustom = ({ date, setDateDNgay, placeholder, ...props }) => {
     const [focus, setFocus] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
-    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const toggleCalendar = () => {
         setShowCalendar(!showCalendar);
@@ -45,6 +46,8 @@ const CalendarCustom = ({ placeholder, ...props }) => {
                         setFocus(false);
                     }}
                     {...props}
+                    value={moment(date).format("DD/MM/YYYY")}
+                    onChangeText={(value) => {}}
                 ></TextInput>
             </View>
 
@@ -54,7 +57,7 @@ const CalendarCustom = ({ placeholder, ...props }) => {
                         flex: 1,
                     }}
                 >
-                    <Calendar
+                    {/* <Calendar
                         style={{
                             flex: 1,
                             borderRadius: 5,
@@ -64,10 +67,20 @@ const CalendarCustom = ({ placeholder, ...props }) => {
                             marginTop: 5,
                             position: "absolute",
                         }}
-                        onDayPress={(day) => {
-                            setVisiblecadelar(true);
-                        }}
+                        onDayPress={(day) => {}}
                         initialDate={"2023-05-30"}
+                    /> */}
+                    <DateTimePickerModal
+                        display="inline"
+                        isVisible={focus}
+                        mode="date"
+                        onConfirm={(date) => {
+                            setDateDNgay(date);
+                            setFocus(false);
+                        }}
+                        onCancel={() => {
+                            setFocus(false);
+                        }}
                     />
                 </View>
             )}
