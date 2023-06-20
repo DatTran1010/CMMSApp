@@ -25,7 +25,8 @@ const callApi = async (
         return response;
     } catch (error) {
         dispatch({ type: "SET_OVERLAY", payload: false });
-        throw new Error(error.message);
+        // throw new Error(error.message);
+        return error;
     }
 };
 

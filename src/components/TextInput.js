@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
     text: {
         width: "100%",
         height: "100%",
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
 });

@@ -15,7 +15,6 @@ import {
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Toast from "react-native-toast-message";
 
 import colors from "../../Common/colors";
 import { windowHeight, heightTextInput } from "../../Common/dimentions";
