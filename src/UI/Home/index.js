@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
             <HeaderApp
                 navigation={navigation}
                 title="My Ecomaint"
-                headerLeftVisible={false}
+                headerLeftVisible={true}
             />
             <TabBottom navigation={navigation} />
         </View>

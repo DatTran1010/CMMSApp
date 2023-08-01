@@ -5,7 +5,14 @@ import { Dropdown } from "react-native-element-dropdown";
 import colors from "../Common/colors";
 import { windowHeight } from "../Common/dimentions";
 
-const DropDown = ({ data, placeholder, labelField, valueField }) => {
+const DropDown = ({
+    data,
+    placeholder,
+    labelField,
+    handleValue,
+    valueField,
+    ...props
+}) => {
     const [focus, setFocus] = useState(false);
     const [value, setValue] = useState("-1");
 
@@ -76,10 +83,8 @@ const DropDown = ({ data, placeholder, labelField, valueField }) => {
                 value={value}
                 onFocus={() => setFocus(true)}
                 onBlur={() => setFocus(false)}
-                onChange={(item) => {
-                    setValue(item.value);
-                    setFocus(false);
-                }}
+                onChange={(item) => handleValue(item)}
+                {...props}
             />
         </View>
     );

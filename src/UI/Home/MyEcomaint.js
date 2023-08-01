@@ -15,6 +15,7 @@ import {
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import moment from "moment";
 
 import colors from "../../Common/colors";
 import { windowHeight, heightTextInput } from "../../Common/dimentions";
@@ -29,17 +30,30 @@ import { useDispatch } from "react-redux";
 import { MainConText } from "../../ConText/MainContext";
 import HeaderMyEcomaint from "./HeaderMyEcomaint";
 
-const MyEcomaint = () => {
+const MyEcomaint = ({ navigation }) => {
     const dispatch = useDispatch();
     const { token } = useContext(MainConText);
 
+    //////  ---------------------------------------------------------- //////
+
+    //#region  useState
+
     const [dataDiaDiem, setDataDiaDiem] = useState([{}]);
     const [dataMachine, setDataMachine] = useState([{}]);
-    const [date, setDate] = useState(new Date());
 
-    const setDateDNgay = (date) => {
-        setDate(date);
-    };
+    const [selectedDiaDiem, setSelectedDiaDiem] = useState("-1");
+    const [selectedThietBi, setSelectedThietBi] = useState("-1");
+
+    const [date, setDate] = useState(moment(new Date()).format("MM/DD/YYYY"));
+
+    const [tableData, setTableData] = useState([{}]);
+    const [hideArrow, setHideArrow] = useState(false);
+    const spinArrowValue = useRef(new Animated.Value(0)).current;
+    //#endregion
+
+    //////  ---------------------------------------------------------- //////
+
+    //#region xử lý load dữ liệu
     const getComboLocation = async () => {
         const endpoint = "/api/home/get-location";
         const method = "GET";
@@ -86,9 +100,9 @@ const MyEcomaint = () => {
         const params = {
             username: "admin",
             languages: 0,
-            dngay: "06/16/2023",
-            ms_nx: -1,
-            mslmay: -1,
+            dngay: date,
+            ms_nx: selectedDiaDiem,
+            mslmay: selectedThietBi,
             xyly: 1,
             pageIndex: 0,
             pageSize: 0,
@@ -105,15 +119,20 @@ const MyEcomaint = () => {
         setTableData(response.data.responseData);
         console.log(response.data.responseData);
     };
+
     useEffect(() => {
         getComboLocation();
         getComboMachine();
-        getDataGridView();
     }, []);
-    const [tableData, setTableData] = useState([{}]);
-    const [hideArrow, setHideArrow] = useState(false);
-    const spinArrowValue = useRef(new Animated.Value(0)).current;
 
+    useEffect(() => {
+        getDataGridView();
+    }, [selectedDiaDiem, selectedThietBi, date]);
+    //#endregion
+
+    //////  ---------------------------------------------------------- //////
+
+    //#region  xử lý sự kiện animation phím mũi tên
     useEffect(() => {
         Animated.timing(spinArrowValue, {
             toValue: hideArrow ? 0 : 1,
@@ -131,6 +150,31 @@ const MyEcomaint = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setHideArrow((pre) => !pre);
     };
+    //#endregion
+
+    //////  ---------------------------------------------------------- //////
+
+    //#region  xử lý các component lọc dữ liệu
+    const handleDiaDiem = (item) => {
+        setSelectedDiaDiem(item.mS_N_XUONG);
+    };
+
+    const handleThietBi = (item) => {
+        setSelectedThietBi(item.mS_LOAI_MAY);
+    };
+    const setDateDNgay = (date) => {
+        setDate(moment(date).format("MM/DD/YYYY"));
+    };
+    //#endregion
+
+    //////  ---------------------------------------------------------- //////
+
+    //#region  xử lý sự kiện focus vào lưới
+    const handleGridYeuCau = (item) => {
+        navigation.navigate("Request", { name: "Request" });
+    };
+    //#endregion
+
     return (
         <View
             style={{ flex: 1, backgroundColor: colors.backgroundColor }}
@@ -165,6 +209,7 @@ const MyEcomaint = () => {
                                 data={dataDiaDiem}
                                 labelField={"teN_N_XUONG"}
                                 valueField={"mS_N_XUONG"}
+                                handleValue={handleDiaDiem}
                             />
                         </View>
                         <View style={styles.filter}>
@@ -173,6 +218,7 @@ const MyEcomaint = () => {
                                 data={dataMachine}
                                 valueField={"mS_LOAI_MAY"}
                                 labelField={"teN_LOAI_MAY"}
+                                handleValue={handleThietBi}
                             />
                         </View>
                         <View
@@ -202,7 +248,7 @@ const MyEcomaint = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.gridView}>
-                <GridView data={tableData} />
+                <GridView data={tableData} handleYeuCau={handleGridYeuCau} />
             </View>
             <View
                 style={{

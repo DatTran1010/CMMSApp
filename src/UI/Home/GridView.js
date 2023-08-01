@@ -11,7 +11,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import colors from "../../Common/colors";
 import { windowHeight } from "../../Common/dimentions";
-const GridView = ({ data }) => {
+import IconInCircle from "../../components/IconInCircle";
+const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const columnsName = () => (
@@ -117,7 +118,12 @@ const GridView = ({ data }) => {
                                             : "white",
                                 }}
                             >
-                                <View style={{ flex: 4 }}>
+                                <View
+                                    style={{
+                                        flex: 3,
+                                        alignItems: "center",
+                                    }}
+                                >
                                     {focusIndex === index && visibleToolTip && (
                                         <TouchableOpacity
                                             style={[
@@ -145,49 +151,302 @@ const GridView = ({ data }) => {
                                     )}
                                     <Text
                                         style={{
-                                            ...styles.columnRowTxt,
+                                            ...styles.colMSMay,
                                         }}
                                     >
                                         {item?.mS_MAY}
                                     </Text>
                                 </View>
                                 <View style={styles.columnValue}>
-                                    <TouchableOpacity style={{ flex: 1 }}>
-                                        <Text style={styles.columnRowTxt}>
-                                            {item.listYC &&
-                                                item.listYC[0]?.duyeT_YC ===
-                                                    1 && (
-                                                    <Ionicons
-                                                        name={"checkmark"}
-                                                        size={20}
-                                                        color={colors.primary}
-                                                    />
-                                                )}
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <View style={{ flex: 1 }}>
-                                        <Text style={styles.columnRowTxt}>
-                                            {item.listBT &&
-                                                item.listBT[0]?.hH_BT === 1 && (
-                                                    <Ionicons
-                                                        name={"checkmark"}
-                                                        size={20}
-                                                        color={colors.primary}
-                                                    />
-                                                )}
-                                        </Text>
-                                    </View>
-                                    <TouchableOpacity style={{ flex: 1 }}>
-                                        <Text style={styles.columnRowTxt}>
-                                            {item.tregs === 2 && (
+                                    <View style={styles.iconStyle}>
+                                        {item.listYC ? (
+                                            item.listYC.map((value) => (
+                                                <TouchableOpacity
+                                                    style={{
+                                                        flex: 1,
+                                                        alignItems: "center",
+                                                        justifyContent:
+                                                            "center",
+                                                    }}
+                                                    onPress={() =>
+                                                        handleYeuCau(item)
+                                                    }
+                                                >
+                                                    {value.muC_YC === 1 ? (
+                                                        value.treyc === 1 ? (
+                                                            value.duyeT_YC ===
+                                                            1 ? (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#ff0000"
+                                                                    }
+                                                                    text="A"
+                                                                />
+                                                            ) : (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#ff0000"
+                                                                    }
+                                                                    text="N"
+                                                                />
+                                                            )
+                                                        ) : value.duyeT_YC ===
+                                                          1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#ff0000"
+                                                                }
+                                                                text="A"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#ff0000"
+                                                                }
+                                                                text="N"
+                                                            />
+                                                        )
+                                                    ) : value.muC_YC === 2 ? (
+                                                        value.treyc === 1 ? (
+                                                            value.duyeT_YC ===
+                                                            1 ? (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#13079b"
+                                                                    }
+                                                                    text="A"
+                                                                />
+                                                            ) : (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#13079b"
+                                                                    }
+                                                                    text="N"
+                                                                />
+                                                            )
+                                                        ) : value.duyeT_YC ===
+                                                          1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#13079b"
+                                                                }
+                                                                text="A"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#13079b"
+                                                                }
+                                                                text="N"
+                                                            />
+                                                        )
+                                                    ) : value.treyc === 1 ? (
+                                                        value.duyeT_YC === 1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#008001"
+                                                                }
+                                                                text="A"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#008001"
+                                                                }
+                                                                text="N"
+                                                            />
+                                                        )
+                                                    ) : value.duyeT_YC === 1 ? (
+                                                        <IconInCircle
+                                                            size={20}
+                                                            color={"#008001"}
+                                                            text="A"
+                                                        />
+                                                    ) : (
+                                                        <IconInCircle
+                                                            size={20}
+                                                            color={"#008001"}
+                                                            text="N"
+                                                        />
+                                                    )}
+                                                </TouchableOpacity>
+                                            ))
+                                        ) : (
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    handleYeuCau(item)
+                                                }
+                                            >
                                                 <Ionicons
-                                                    name={"checkmark"}
+                                                    name="close-outline"
                                                     size={20}
-                                                    color={colors.primary}
+                                                    color="#fff0"
                                                 />
-                                            )}
-                                        </Text>
-                                    </TouchableOpacity>
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
+                                    <View style={styles.iconStyle}>
+                                        {item.listBT ? (
+                                            item.listBT.map((value) => (
+                                                <TouchableOpacity
+                                                    style={{
+                                                        flex: 1,
+                                                        alignItems: "center",
+                                                        justifyContent:
+                                                            "center",
+                                                    }}
+                                                >
+                                                    {value.muC_BT === 1 ? (
+                                                        value.trebt === 1 ? (
+                                                            value.hH_BT ===
+                                                            1 ? (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#ff0000"
+                                                                    }
+                                                                    text="C"
+                                                                />
+                                                            ) : (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#ff0000"
+                                                                    }
+                                                                    text="P"
+                                                                />
+                                                            )
+                                                        ) : value.hH_BT ===
+                                                          1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#ff0000"
+                                                                }
+                                                                text="C"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#ff0000"
+                                                                }
+                                                                text="P"
+                                                            />
+                                                        )
+                                                    ) : value.muC_BT === 2 ? (
+                                                        value.trebt === 1 ? (
+                                                            value.hH_BT ===
+                                                            1 ? (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#13079b"
+                                                                    }
+                                                                    text="C"
+                                                                />
+                                                            ) : (
+                                                                <IconInCircle
+                                                                    size={20}
+                                                                    color={
+                                                                        "#13079b"
+                                                                    }
+                                                                    text="P"
+                                                                />
+                                                            )
+                                                        ) : value.hH_BT ===
+                                                          1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#13079b"
+                                                                }
+                                                                text="C"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#13079b"
+                                                                }
+                                                                text="P"
+                                                            />
+                                                        )
+                                                    ) : value.trebt === 1 ? (
+                                                        value.hH_BT === 1 ? (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#008001"
+                                                                }
+                                                                text="C"
+                                                            />
+                                                        ) : (
+                                                            <IconInCircle
+                                                                size={20}
+                                                                color={
+                                                                    "#008001"
+                                                                }
+                                                                text="P"
+                                                            />
+                                                        )
+                                                    ) : value.hH_BT === 1 ? (
+                                                        <IconInCircle
+                                                            size={20}
+                                                            color={"#008001"}
+                                                            text="C"
+                                                        />
+                                                    ) : (
+                                                        <IconInCircle
+                                                            size={20}
+                                                            color={"#008001"}
+                                                            text="P"
+                                                        />
+                                                    )}
+                                                </TouchableOpacity>
+                                            ))
+                                        ) : (
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    alert(1);
+                                                }}
+                                                style={{}}
+                                            >
+                                                <Ionicons
+                                                    name="close-outline"
+                                                    size={20}
+                                                    color="#fff0"
+                                                />
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
+                                    <View style={styles.iconStyle}>
+                                        <TouchableOpacity>
+                                            {item.tregs === 2 ? (
+                                                <Ionicons
+                                                    name="close-outline"
+                                                    size={30}
+                                                    color="#13079b"
+                                                />
+                                            ) : item.tregs === 1 ? (
+                                                <Ionicons
+                                                    name="close-outline"
+                                                    size={30}
+                                                    color="#fff0"
+                                                />
+                                            ) : null}
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </TouchableNativeFeedback>
@@ -211,14 +470,19 @@ const styles = StyleSheet.create({
     styleRows: {
         flexDirection: "row",
         paddingVertical: 15,
+        alignItems: "center",
+        justifyContent: "center",
     },
-    columnRowTxt: {
-        paddingLeft: 10,
+    iconStyle: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+    },
+    colMSMay: {
         fontSize: 12,
-        textAlign: "left",
         fontWeight: "400",
+        justifyContent: "center",
     },
-
     columnValue: {
         flexDirection: "row",
         justifyContent: "center",

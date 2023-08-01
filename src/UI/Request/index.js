@@ -14,8 +14,8 @@ import CustomTextInput from "../../components/TextInput";
 import { heightTextArea, windowHeight } from "../../Common/dimentions";
 import DropDown from "../../components/DropDown";
 import CalendarCustom from "../../components/Calendar";
-
-const Request = () => {
+import HeaderApp from "../Home/HeaderApp";
+const Request = ({ navigation }) => {
     const [dataDiaDiem, setDataDiaDiem] = useState([
         { label: "Trong xưởng", value: 1 },
         { label: "Văn phòng", value: 2 },
@@ -34,6 +34,12 @@ const Request = () => {
     };
     return (
         <View style={styles.container}>
+            <HeaderApp
+                navigation={navigation}
+                title="YÊU CẦU BẢO TRÌ"
+                headerLeftVisible={true}
+                goBack={true}
+            />
             <View style={styles.control}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.header}>
