@@ -16,6 +16,7 @@ import ModalUser from "./src/Common/ModalUser";
 import Request from "./src/UI/Request";
 import Overlay from "./src/Common/Overlay";
 import store from "./src/Redux/store";
+import Maintenance from "./src/UI/BaoTri";
 
 export default function App() {
     const Stack = createStackNavigator();
@@ -67,7 +68,7 @@ export default function App() {
                 >
                     <NavigationContainer>
                         <Stack.Navigator defaultScreenOptions={Home}>
-                            <Stack.Screen
+                            {/* <Stack.Screen
                                 name="Login"
                                 component={Login}
                                 options={{
@@ -84,6 +85,12 @@ export default function App() {
                             <Stack.Screen
                                 name="Request"
                                 component={Request}
+                                options={{ headerShown: true }}
+                            /> */}
+
+                            <Stack.Screen
+                                name="Maintenance"
+                                component={Maintenance}
                                 options={{ headerShown: true }}
                             />
 
