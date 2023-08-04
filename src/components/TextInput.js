@@ -21,6 +21,7 @@ const CustomTextInput = ({ placeholder, height, ...props }) => {
                     {
                         borderColor: focus ? colors.primary : colors.border,
                         height: height,
+                        flex: 1,
                     },
                 ]}
             >
