@@ -4,11 +4,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   Animated,
   LayoutAnimation,
   KeyboardAvoidingView,
-  Modal,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import Checkbox from "expo-checkbox";
@@ -22,9 +20,11 @@ import DropDown from "../../components/DropDown";
 
 import CalendarCustom from "../../components/Calendar";
 import HeaderApp from "../Home/HeaderApp";
-import InListBaoTri from "./InListBaoTri";
-import ModalListPhuTung from "./ModalListPhuTung";
-const Maintenance = ({ navigation }) => {
+import InListBaoTri from "./../BaoTri/InListBaoTri";
+import ModalListPhuTung from "./../BaoTri/ModalListPhuTung";
+import RadioButton from "../../components/RadioButton";
+
+const Monitor = ({ navigation }) => {
   const [dataDiaDiem, setDataDiaDiem] = useState([
     { label: "Trong xưởng", value: 1 },
     { label: "Văn phòng", value: 2 },
@@ -142,6 +142,29 @@ const Maintenance = ({ navigation }) => {
       animatedValue.setValue(1);
     });
   };
+
+  //#region  Xử lý radio button
+  const optionsRadio = [
+    {
+      id: 1,
+      label: "Những thông số đến hạn",
+    },
+    {
+      id: 2,
+      label: "Tất cả",
+    },
+  ];
+
+  const [selectedOption, setSelectedOption] = useState({});
+
+  const handleSelectedOption = (optionId) => {
+    setSelectedOption({ [optionId]: true });
+  };
+
+  //   console.log(parseInt(Object.keys(selectedOption)[0]));
+
+  //#endregion
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -151,7 +174,7 @@ const Maintenance = ({ navigation }) => {
       <View style={{ flex: 1 }}>
         <HeaderApp
           navigation={navigation}
-          title="PHIẾU BẢO TRÌ"
+          title="GIÁM SÁT TÌNH TRẠNG MÁY"
           headerLeftVisible={true}
           goBack={true}
         />
@@ -159,60 +182,36 @@ const Maintenance = ({ navigation }) => {
           <ScrollView style={{ flex: 1 }}>
             <View style={styles.header}>
               <View style={styles.labelDevice}>
-                <Text style={styles.textCodeDevice}>BAF-3508</Text>
-                <Text style={styles.textNameDevice}>
-                  Hệ thống lọc bụi JT05 (Máy nghiền HM01)
-                </Text>
+                <Text style={styles.textCodeDevice}>HAM-0010</Text>
+                <Text style={styles.textNameDevice}>Coarse Grinding - 562</Text>
               </View>
               <View style={styles.line}></View>
             </View>
             <View style={styles.body}>
-              <View style={styles.viewTextMachine}>
-                <Text style={styles.textMachine}>WO-202308000007</Text>
-                <Text style={styles.textMachine}>03/08/2023</Text>
-              </View>
+              {optionsRadio.map((option) => (
+                <View style={styles.viewInput}>
+                  <RadioButton
+                    key={option.id}
+                    label={option.label}
+                    onSelected={() => handleSelectedOption(option.id)}
+                    selected={selectedOption[option.id]}
+                  />
+                </View>
+              ))}
               <View style={styles.viewInput}>
-                <DropDown
-                  placeholder={"Loại bảo trì"}
-                  data={dataDiaDiem}
-                  labelField={"label"}
-                  valueField={"value"}
-                />
-              </View>
-              <View style={styles.viewInput}>
-                <DropDown
-                  placeholder={"Mức độ khẩn cấp"}
-                  data={dataDiaDiem}
-                  labelField={"label"}
-                  valueField={"value"}
-                />
-              </View>
-              <View style={styles.viewInput}>
-                <CustomTextInput
-                  placeholder={"Ghi chú"}
-                  multiline
-                  height={heightTextMedium}
-                />
-              </View>
-              <View
-                style={[
-                  styles.viewInput,
-                  {
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    display: "flex",
-                    flexDirection: "row",
-                  },
-                ]}
-              >
-                <Text style={styles.textReason}>Cầu giao bị hỏng</Text>
-                <TouchableOpacity style={styles.iconStyle}>
-                  <Ionicons name="save" size={20} color={colors.primary} />
+                <TouchableOpacity style={styles.checkHideDetail}>
+                  <Checkbox
+                    value={false}
+                    color={colors.primary}
+                    onValueChange={() => {}}
+                  />
+                  <Text style={{ flex: 1, marginLeft: 12 }}>Ẩn chi tiết</Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.line}></View>
-              <View style={styles.listPhieuBaoTri}>
+
+              <View style={styles.listPhieuGiamSat}>
                 {data.map((value, index) => (
                   <>
                     <View key={index} style={{ flex: 1, position: "relative" }}>
@@ -224,34 +223,20 @@ const Maintenance = ({ navigation }) => {
                         </View>
                       )}
                       <TouchableOpacity
-                        style={styles.listPBTDetail}
+                        style={styles.listGiamSatDetail}
                         activeOpacity={0.5}
                         onPress={() => handleItemListPBT(index)}
                         onLongPress={() => onPressInListPBT(index)}
                         onPressOut={onPressOut}
                       >
-                        <View style={styles.leftListPBT}>
+                        <View style={styles.leftListGiamSat}>
                           <Text> + {value.TEN_PHIEU}</Text>
                         </View>
-                        <Animated.View style={styles.iconListPBT}>
+                        <Animated.View style={styles.iconListGiamSat}>
                           <TouchableOpacity>
                             <Ionicons
-                              name="link-outline"
-                              size={20}
-                              color={colors.primary}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity>
-                            <Ionicons
-                              name="move-outline"
-                              size={20}
-                              color={colors.primary}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity>
-                            <Ionicons
-                              name="trash-outline"
-                              size={20}
+                              name="camera"
+                              size={25}
                               color={colors.primary}
                             />
                           </TouchableOpacity>
@@ -344,7 +329,7 @@ const Maintenance = ({ navigation }) => {
   );
 };
 
-export default Maintenance;
+export default Monitor;
 
 const styles = StyleSheet.create({
   tooltipContainer: {
@@ -379,28 +364,23 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
 
-  viewTextMachine: {
+  checkHideDetail: {
+    display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingBottom: 20,
   },
 
-  textMachine: {
-    fontSize: 16,
-    fontWeight: "400",
-    color: colors.black,
-  },
   textReason: {
     fontSize: 16,
     fontWeight: "400",
   },
-  listPhieuBaoTri: {
+  listPhieuGiamSat: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
   },
-  listPBTDetail: {
+  listGiamSatDetail: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -418,14 +398,15 @@ const styles = StyleSheet.create({
     height: heightTextInput,
   },
 
-  leftListPBT: {
+  leftListGiamSat: {
     flex: 4,
   },
-  iconListPBT: {
+  iconListGiamSat: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     flex: 1,
+    paddingHorizontal: 10,
   },
   hideInList: {
     flex: 1,
