@@ -69,7 +69,7 @@ export default function App() {
         >
           <NavigationContainer>
             <Stack.Navigator defaultScreenOptions={Home}>
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="Login"
                 component={Login}
                 options={{
@@ -93,7 +93,7 @@ export default function App() {
                 name="Maintenance"
                 component={Maintenance}
                 options={{ headerShown: true }}
-              /> */}
+              />
               <Stack.Screen
                 name="Monitor"
                 component={Monitor}

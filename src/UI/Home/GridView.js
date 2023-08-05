@@ -16,7 +16,11 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const columnsName = () => (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
       <View
         style={{
           flex: 1,
@@ -67,11 +71,13 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
   const handleRowGrid = (event, index, item) => {
     const { pageX, pageY } = event.nativeEvent;
     setTooltipPosition({ x: pageX, y: pageY });
-    setVisibleToolTip(true);
     setFocusIndex(index);
     setContentToolTip(item.teN_MAY);
   };
 
+  const handleLongPressRowGrid = (index) => {
+    setSelectedIndexRow(index);
+  };
   const unHandleRowGrid = () => {
     setFocusIndex(-1);
     setVisibleToolTip(false);
@@ -81,7 +87,7 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
   const [visibleToolTip, setVisibleToolTip] = useState(false); //set ẩn hiện tooltip
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 }); // lấy vị trí của tooltip (không sử dụng nữa)
   const [contentToolTip, setContentToolTip] = useState("");
-
+  const [selectedIndexRow, setSelectedIndexRow] = useState(null);
   //#endregion
 
   //focus vào dòng đổi màu, lấy index
@@ -103,6 +109,10 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
           return (
             <TouchableNativeFeedback
               onPress={(event) => handleRowGrid(event, index, item)}
+              onLongPress={() => handleLongPressRowGrid(index)}
+              onPressOut={() => {
+                setSelectedIndexRow(null);
+              }}
               style={{ flex: 1 }}
             >
               <View
@@ -116,13 +126,25 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
                       : "white",
                 }}
               >
+                {selectedIndexRow === index && (
+                  <View
+                    style={[
+                      styles.tooltipContainer,
+                      {
+                        top: -13, // Change this value based on your design
+                      },
+                    ]}
+                  >
+                    <Text style={styles.tooltipText}>{item.teN_MAY}</Text>
+                  </View>
+                )}
                 <View
                   style={{
                     flex: 3,
                     alignItems: "center",
                   }}
                 >
-                  {focusIndex === index && visibleToolTip && (
+                  {/* {focusIndex === index && visibleToolTip && (
                     <TouchableOpacity
                       style={[
                         styles.tooltipContainer,
@@ -144,7 +166,8 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
                         {contentToolTip}
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
+
                   <Text
                     style={{
                       ...styles.colMSMay,
@@ -370,7 +393,7 @@ const GridView = ({ data, handleYeuCau, handleBaoTri, handleGiamSat }) => {
                     )}
                   </View>
                   <View style={styles.iconStyle}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleGiamSat(item)}>
                       {item.tregs === 2 ? (
                         <Ionicons
                           name="close-outline"
@@ -431,5 +454,13 @@ const styles = StyleSheet.create({
   columnHeaderTxt: {
     textAlign: "center",
     fontWeight: "400",
+  },
+
+  tooltipContainer: {
+    position: "absolute",
+    backgroundColor: colors.primary,
+    padding: 8,
+    borderRadius: 4,
+    left: 10,
   },
 });
