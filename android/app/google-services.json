@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "756458611097",
+    "project_id": "test-notification-androi-4b5f0",
+    "storage_bucket": "test-notification-androi-4b5f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756458611097:android:1119261824a36cf55a7308",
+        "android_client_info": {
+          "package_name": "com.dattranlfc1010.EcommerceApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756458611097-ve7n7ng02iufia40j93ib8053av6gtjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_TLjnt_ZYbexS5fBmTUJeU1lOzfENhHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756458611097-ve7n7ng02iufia40j93ib8053av6gtjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.dattranlfc1010.EcommerceApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
