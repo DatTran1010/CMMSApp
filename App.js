@@ -18,6 +18,7 @@ import Overlay from "./src/Common/Overlay";
 import store from "./src/Redux/store";
 import Maintenance from "./src/UI/BaoTri";
 import Monitor from "./src/UI/GiamSat";
+import DeviceMove from "./src/UI/DeviceMove";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -69,7 +70,7 @@ export default function App() {
         >
           <NavigationContainer>
             <Stack.Navigator defaultScreenOptions={Home}>
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Login"
                 component={Login}
                 options={{
@@ -98,7 +99,13 @@ export default function App() {
                 name="Monitor"
                 component={Monitor}
                 options={{ headerShown: true }}
+              /> */}
+              <Stack.Screen
+                name="DeviceMove"
+                component={DeviceMove}
+                options={{ headerShown: true }}
               />
+
               {/* <Stack.Screen
                                 name="Visuak"
                                 component={Visual}

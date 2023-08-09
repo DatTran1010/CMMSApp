@@ -59,10 +59,13 @@ const Monitor = ({ navigation }) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   };
   const handleCheckedHideDetail = () => {
-    setCheckedHideDetail(!checkedHideDetail);
+    const newCheckedHideDetail = !checkedHideDetail;
 
+    setCheckedHideDetail(newCheckedHideDetail);
     const newHiddenRows = data.map((_, index) => index);
-    setHiddenRows(checkedHideDetail ? newHiddenRows : []);
+
+    setHiddenRows(newCheckedHideDetail ? [] : newHiddenRows);
+
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   };
   //#region  Xử lý radio button

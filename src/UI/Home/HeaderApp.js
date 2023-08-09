@@ -51,19 +51,6 @@ const HeaderApp = ({
           }}
         >
           <Ionicons
-            name="information-circle-outline"
-            size={20}
-            color={colors.black}
-            onPress={() => {}}
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              left: -40,
-              position: "absolute",
-            }}
-          />
-          <Ionicons
             name="notifications"
             size={30}
             color={colors.black}

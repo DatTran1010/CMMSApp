@@ -117,7 +117,7 @@ const MyEcomaint = ({ navigation }) => {
       params
     );
     setTableData(response.data.responseData);
-    console.log(response.data.responseData);
+    // console.log(response.data.responseData);
   };
 
   useEffect(() => {
