@@ -19,6 +19,7 @@ import store from "./src/Redux/store";
 import Maintenance from "./src/UI/BaoTri";
 import Monitor from "./src/UI/GiamSat";
 import DeviceMove from "./src/UI/DeviceMove";
+import Operating from "./src/UI/VanHanhMay";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -100,9 +101,15 @@ export default function App() {
                 component={Monitor}
                 options={{ headerShown: true }}
               /> */}
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="DeviceMove"
                 component={DeviceMove}
+                options={{ headerShown: true }}
+              /> */}
+
+              <Stack.Screen
+                name="Operating"
+                component={Operating}
                 options={{ headerShown: true }}
               />
 
