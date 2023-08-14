@@ -11,7 +11,7 @@ const callApi = async (
   try {
     dispatch({ type: "SET_OVERLAY", payload: true });
     const response = await axios.request({
-      baseURL: "http://192.168.2.9:7174/",
+      baseURL: "http://27.74.240.29/apiPDM/",
       timeout: 5000,
       url: endpoint,
       method: method,

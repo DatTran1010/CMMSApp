@@ -9,19 +9,27 @@ import {
   VictoryContainer,
   VictoryAxis,
   VictoryZoomContainer,
+  VictoryStack,
+  VictoryTooltip,
 } from "victory-native";
 
 import { Svg } from "react-native-svg";
 import colors from "../../../Common/colors";
 import { windowHeight, windowWidth } from "../../../Common/dimentions";
 
-const ConsumtionChart = ({ data }) => {
+const OEEChart = ({ data }) => {
+  const labels = data.map((item) => item.date);
+  const maleData = data.map((item) => ({ x: item.date, y: item.male }));
+  const femaleData = data.map((item) => ({ x: item.date, y: item.female }));
+  const otherData = data.map((item) => ({ x: item.date, y: item.other }));
+
   const [focusedBar, setFocusedBar] = useState(null);
+
   return (
     <View style={{ flex: 1 }}>
       <VictoryChart
         theme={VictoryTheme.material}
-        domainPadding={20}
+        domainPadding={15}
         width={windowWidth + 10} // Tùy chỉnh chiều rộng của biểu đồ
         height={windowHeight / 2} // Tùy chỉnh chiều cao của biểu đồ
         // containerComponent={
@@ -37,62 +45,49 @@ const ConsumtionChart = ({ data }) => {
         <VictoryAxis></VictoryAxis>
         <VictoryAxis
           dependentAxis
-          label={"Kwh"}
+          label={"SL máy"}
           style={{
             axisLabel: {
               padding: 30,
             },
           }}
         ></VictoryAxis>
-        <VictoryGroup
-          offset={15}
+        <VictoryStack
           style={{
             data: { stroke: "rgba(0,0,0,0.5)", strokeWidth: 1 },
           }}
         >
           <VictoryBar
+            animate
             data={data}
             x="date"
-            y="tonG_TH"
-            animate={{ duration: 2000, easing: "bounce" }}
-            style={{
-              data: {
-                width: 20,
-                fill: data[0].colorTONG_TH,
-              },
-            }}
-
-            //   labels={({ datum }) => `${datum.y}`}
+            y="DAT"
+            style={{ data: { fill: data[0].colorDAT, width: 30 } }}
+            labels={(datum) => datum.datum._y}
+            labelComponent={<VictoryTooltip renderInPortal={false} />}
           />
           <VictoryBar
+            animate
             data={data}
             x="date"
-            y="tonG_CX"
-            animate={{ duration: 2000, easing: "bounce" }}
-            style={{
-              data: {
-                width: 20,
-                fill: data[0].colorTONG_CX,
-              },
-            }}
-            events={[
-              {
-                target: "data",
-                eventHandlers: {
-                  onPress: () => {
-                    alert(123);
-                  },
-                },
-              },
-            ]}
-
-            //   labels={({ datum }) => `${datum.y}`}
+            y="KHONG_DAT"
+            style={{ data: { fill: data[0].colorKHONG_DAT, width: 30 } }}
+            labels={(datum) => datum.datum._y}
+            labelComponent={<VictoryTooltip renderInPortal={false} />}
           />
-        </VictoryGroup>
+          <VictoryBar
+            animate
+            data={data}
+            x="date"
+            y="KHONG_HD"
+            style={{ data: { fill: data[0].colorKHONG_HD, width: 30 } }}
+            labels={(datum) => datum.datum._y}
+            labelComponent={<VictoryTooltip renderInPortal={false} />}
+          />
+        </VictoryStack>
       </VictoryChart>
     </View>
   );
 };
 
-// export default memo(ConsumtionChart);
-export default ConsumtionChart;
+export default memo(OEEChart);

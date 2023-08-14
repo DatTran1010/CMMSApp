@@ -19,49 +19,87 @@ import {
 } from "victory-native";
 import { Svg } from "react-native-svg";
 import { Calendar } from "react-native-calendars";
-import moment from "moment";
-import { useDispatch } from "react-redux";
 
 import colors from "../../../Common/colors";
 import { windowHeight, windowWidth } from "../../../Common/dimentions";
 import IconButton from "../../../components/IconButton";
-import ConsumtionChart from "./ConsumtionChart";
+import OEEChart from "./OEEChart";
 import CalendarComponent from "../../../components/CalendarComponent";
-import callApi from "../../../ConText/api";
-const Consumption = () => {
+
+const OEEMain = () => {
   //#region  State
 
-  const [data, setData] = useState([{}]);
-
-  const dispatch = useDispatch();
-
+  const [data, setData] = useState([
+    {
+      date: "07/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "08/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "09/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "10/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "11/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "12/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+    {
+      date: "13/10",
+      DAT: 60,
+      KHONG_DAT: 25,
+      KHONG_HD: 20,
+      colorDAT: colors.primary,
+      colorKHONG_DAT: colors.primarySecond,
+      colorKHONG_HD: colors.gray,
+    },
+  ]);
   const [showCalendar, setShowCalendar] = useState(false);
   const [dateToFrom, setDateToFrom] = useState({
-    startDate: moment(new Date()).format("YYYY-MM-DD"),
-    endDate: moment(new Date()).add(6, "days").format("YYYY-MM-DD"),
+    startDate: "2023-08-12",
+    endDate: "2023-08-12",
   });
 
-  //#endregion
-  //#region  callAPI
-
-  const getData = async () => {
-    const endpoint = "/api/motorwatch/bieudo1";
-    const method = "GET";
-    const params = {
-      dTngay: dateToFrom.startDate,
-      dDngay: dateToFrom.endDate,
-    };
-
-    const response = await callApi(
-      dispatch,
-      endpoint,
-      method,
-      null,
-      "",
-      params
-    );
-    setData(response.data);
-  };
   //#endregion
 
   const handleShowCaledar = () => {
@@ -81,10 +119,6 @@ const Consumption = () => {
     setShowCalendar(false);
   };
 
-  useEffect(() => {
-    getData();
-  }, [dateToFrom]);
-
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <View
@@ -103,7 +137,7 @@ const Consumption = () => {
         }}
       >
         <View style={styles.titleChart}>
-          <Text style={styles.textTitle}>Tiêu hao năng lượng</Text>
+          <Text style={styles.textTitle}>Chỉ số OEE</Text>
           <IconButton
             size={30}
             nameicon="document-text-outline"
@@ -125,33 +159,34 @@ const Consumption = () => {
             />
           )}
         </View>
-        {data.some((item) => Object.keys(item).length > 0) ? (
-          <ConsumtionChart data={data} />
-        ) : (
-          <></>
-        )}
+        {data && <OEEChart data={data} />}
 
         <View style={styles.legendContainer}>
           <View style={styles.legendContent}>
             <View
-              style={{
-                width: 20,
-                height: 20,
-                backgroundColor: data[0].colorTONG_TH,
-              }}
+              style={[styles.iconLegend, { backgroundColor: data[0].colorDAT }]}
             ></View>
-            <Text style={styles.textLegend}>Tổng tiêu hao điện năng</Text>
+            <Text style={styles.textLegend}>OEE đạt</Text>
           </View>
 
           <View style={styles.legendContent}>
             <View
-              style={{
-                width: 20,
-                height: 20,
-                backgroundColor: data[0].colorTONG_CX,
-              }}
+              style={[
+                styles.iconLegend,
+                { backgroundColor: data[0].colorKHONG_DAT },
+              ]}
             ></View>
-            <Text style={styles.textLegend}>Tổng công xuất</Text>
+            <Text style={styles.textLegend}>OEE chưa đạt</Text>
+          </View>
+
+          <View style={styles.legendContent}>
+            <View
+              style={[
+                styles.iconLegend,
+                { backgroundColor: data[0].colorKHONG_HD },
+              ]}
+            ></View>
+            <Text style={styles.textLegend}>Không hoạt động</Text>
           </View>
         </View>
       </View>
@@ -159,7 +194,7 @@ const Consumption = () => {
   );
 };
 
-export default Consumption;
+export default OEEMain;
 
 const styles = StyleSheet.create({
   container: {
@@ -183,6 +218,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "400",
     marginHorizontal: 5,
+  },
+  iconLegend: {
+    width: 20,
+    height: 20,
   },
 
   titleChart: {
