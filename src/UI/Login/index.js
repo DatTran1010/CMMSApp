@@ -16,7 +16,7 @@ import Toast from "react-native-toast-message";
 // import messaging from "@react-native-firebase/messaging";
 
 import colors from "../../Common/colors";
-import globalstyle from "../../Common/globalstyle";
+import globalstyle from "../../Common/theme";
 import TextInput from "../../components/TextInput.js";
 import {
   windowWidth,
@@ -25,43 +25,46 @@ import {
 } from "../../Common/dimentions";
 import callApi from ".././../ConText/api.js";
 import { MainConText } from "../../ConText/MainContext";
+import { droidSafeArea } from "../../Common/theme";
 
 const Login = ({ navigation }) => {
   const { token, setToken } = useContext(MainConText);
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    const endpoint = "/api/account/login";
-    const method = "POST";
-    const data = {
-      employeeCode: "0003",
-      password: "123456",
-      token: "string",
-    };
-    const response = await callApi(dispatch, endpoint, method, data);
-    try {
-      if (response && response.data.statusCode == 200) {
-        setToken(response.data.responseData.token);
-        navigation.navigate("Home");
-        Toast.show({
-          type: "success",
-          text1: "Thông báo",
-          text2: "Đăng nhập thành công",
-        });
-      } else {
-        Toast.show({
-          type: "success",
-          text1: "Thông báo",
-          text2: "Đăng nhập không thành công",
-        });
-      }
-    } catch {
-      Toast.show({
-        type: "error",
-        text1: "Thông báo",
-        text2: "Đăng nhập không thành công",
-      });
-    }
+    // const endpoint = "/api/account/login";
+    // const method = "POST";
+    // const data = {
+    //   employeeCode: "0003",
+    //   password: "123456",
+    //   token: "string",
+    // };
+    // const response = await callApi(dispatch, endpoint, method, data);
+    // try {
+    //   if (response && response.data.statusCode == 200) {
+    //     setToken(response.data.responseData.token);
+    //     navigation.navigate("Home");
+    //     Toast.show({
+    //       type: "success",
+    //       text1: "Thông báo",
+    //       text2: "Đăng nhập thành công",
+    //     });
+    //   } else {
+    //     Toast.show({
+    //       type: "success",
+    //       text1: "Thông báo",
+    //       text2: "Đăng nhập không thành công",
+    //     });
+    //   }
+    // } catch {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Thông báo",
+    //     text2: "Đăng nhập không thành công",
+    //   });
+    // }
+
+    navigation.navigate("Home");
   };
 
   return (
@@ -70,7 +73,7 @@ const Login = ({ navigation }) => {
       extraScrollHeight={35}
     >
       <SafeAreaView
-        style={globalstyle.droidSafeArea}
+        style={droidSafeArea}
         onStartShouldSetResponder={() => {
           //   Keyboard.dismiss();
         }}

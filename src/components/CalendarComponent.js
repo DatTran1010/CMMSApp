@@ -2,6 +2,7 @@ import { View, Text, Animated, TouchableOpacity } from "react-native";
 import React, { useState, useEffect, memo } from "react";
 import { Calendar } from "react-native-calendars";
 import colors from "../Common/colors";
+import { windowHeight, windowWidth } from "../Common/dimentions";
 
 const CalendarComponent = ({
   onClickDone,
@@ -16,7 +17,6 @@ const CalendarComponent = ({
     endDate: endDate,
   });
 
-  console.log("rerender-calendar");
   useEffect(() => {
     const updatedMarkedDates = {};
 
@@ -70,10 +70,13 @@ const CalendarComponent = ({
   };
 
   return (
-    <Animated.View style={{ flex: 1 }}>
+    <Animated.View
+      style={{
+        flex: 1,
+      }}
+    >
       <Calendar
         style={{
-          flex: 1,
           borderRadius: 10,
           borderColor: colors.primary,
           borderWidth: 1,

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { Dropdown } from "react-native-element-dropdown";
+import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 
 import colors from "../Common/colors";
 import { windowHeight } from "../Common/dimentions";
@@ -11,6 +11,7 @@ const DropDown = ({
   labelField,
   handleValue,
   valueField,
+  multiselected = false,
   ...props
 }) => {
   const [focus, setFocus] = useState(false);
@@ -27,63 +28,78 @@ const DropDown = ({
     return null;
   };
 
+  const renderItem = (item, index) => {
+    return (
+      <View style={styles.item}>
+        <Text
+          style={[
+            styles.textItem,
+            { color: item[valueField] % 2 === 1 ? "red" : "blue" },
+          ]}
+        >
+          {item[labelField]}
+        </Text>
+      </View>
+    );
+  };
+
+  const [selected, setSelected] = useState([]);
+
   return (
-    // <View style={{ flex: 1 }}>
-    //     {renderLabel()}
-    //     <Dropdown
-    //         style={[
-    //             styles.dropdownStyle,
-    //             {
-    //                 borderColor: focus ? colors.primary : colors.border,
-    //                 borderWidth: 1,
-    //                 backgroundColor: colors.white,
-    //             },
-    //         ]}
-    //         data={data}
-    //         placeholderStyle={styles.placeholderDropDown}
-    //         selectedTextStyle={styles.selectedDropDown}
-    //         inputSearchStyle={styles.inputSearchStyle}
-    //         iconStyle={styles.iconDropDownStyle}
-    //         search
-    //         maxHeight={300}
-    //         labelField={labelField}
-    //         valueField={valueField}
-    //         placeholder={placeholder}
-    //         searchPlaceholder="Search..."
-    //         value={"-1"}
-    //         onFocus={() => {
-    //             setFocus(true);
-    //         }}
-    //         onBlur={() => {
-    //             setFocus(false);
-    //         }}
-    //         onChange={() => {}}
-    //     />
-    // </View>
     <View style={styles.container}>
       {renderLabel()}
-      <Dropdown
-        style={[
-          styles.dropdown,
-          { borderColor: focus ? colors.primary : colors.border },
-        ]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        search
-        maxHeight={300}
-        labelField={labelField}
-        valueField={valueField}
-        placeholder={!focus && placeholder}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
-        onChange={(item) => handleValue(item)}
-        {...props}
-      />
+      {!multiselected ? (
+        <Dropdown
+          style={[
+            styles.dropdown,
+            { borderColor: focus ? colors.primary : colors.border },
+          ]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={300}
+          labelField={labelField}
+          valueField={valueField}
+          placeholder={!focus && placeholder}
+          searchPlaceholder="Search..."
+          value={value}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          onChange={(item, index) => handleValue(item)}
+          renderItem={renderItem}
+          {...props}
+        />
+      ) : (
+        <MultiSelect
+          style={[
+            styles.dropdown,
+            { borderColor: focus ? colors.primary : colors.border },
+          ]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={300}
+          labelField={labelField}
+          valueField={valueField}
+          placeholder={""}
+          searchPlaceholder="Search..."
+          value={selected}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          onChange={(item) => {
+            setSelected(item);
+          }}
+          renderItem={renderItem}
+          selectedStyle={{ borderRadius: 12 }}
+          {...props}
+        />
+      )}
     </View>
   );
 };
@@ -155,6 +171,16 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
+    fontSize: 16,
+  },
+  item: {
+    padding: 17,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textItem: {
+    flex: 1,
     fontSize: 16,
   },
 });

@@ -5,11 +5,11 @@ import colors from "../../Common/colors";
 import Consumption from "./TieuHao";
 import EngineState from "./EngineState";
 import OEEMain from "./OEE";
-const MyMotorWatch = () => {
+const MyMotorWatch = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Consumption />
+        <Consumption navigation={navigation} />
         <EngineState />
         <OEEMain />
       </ScrollView>
