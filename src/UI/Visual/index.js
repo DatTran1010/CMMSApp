@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
-import globalstyle from "../../Common/globalstyle";
 import colors from "../../Common/colors";
 const Visual = () => {
     const width = Dimensions.get("window").width;
