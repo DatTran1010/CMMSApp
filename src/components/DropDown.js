@@ -7,6 +7,7 @@ import { windowHeight } from "../Common/dimentions";
 
 const DropDown = ({
   data,
+  value,
   placeholder,
   labelField,
   handleValue,
@@ -15,7 +16,6 @@ const DropDown = ({
   ...props
 }) => {
   const [focus, setFocus] = useState(false);
-  const [value, setValue] = useState("-1");
 
   const renderLabel = () => {
     if (value != "" || focus) {
@@ -34,7 +34,9 @@ const DropDown = ({
         <Text
           style={[
             styles.textItem,
-            { color: item[valueField] % 2 === 1 ? "red" : "blue" },
+            {
+              color: item["color"] !== undefined ? item["color"] : colors.black,
+            },
           ]}
         >
           {item[labelField]}

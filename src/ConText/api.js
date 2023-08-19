@@ -1,4 +1,5 @@
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const callApi = async (
   dispatch,
@@ -19,9 +20,18 @@ const callApi = async (
       params: params,
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (response.status == 200) {
       dispatch({ type: "SET_OVERLAY", payload: false });
+    } else {
+      dispatch({ type: "SET_OVERLAY", payload: false });
+      Toast.show({
+        type: "error",
+        text1: "Thông báo",
+        text2: "Error",
+      });
     }
+
     return response;
   } catch (error) {
     dispatch({ type: "SET_OVERLAY", payload: false });

@@ -37,7 +37,7 @@ const GridRow = ({ data, index, columnRemove }) => {
             <TouchableOpacity style={{ flex: 1, justifyContent: "center" }}>
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 14,
                   color:
                     data["color"] !== undefined ? data["color"] : colors.black,
                   flexShrink: 1,

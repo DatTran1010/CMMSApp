@@ -16,7 +16,7 @@ import GridRow from "./GridRow";
 const GridViewComponent = ({
   data,
   dataHeader,
-  columnRemove,
+  columnRemove = "",
   onSortTable,
   HeaderComponent,
 }) => {
@@ -66,11 +66,9 @@ const GridViewComponent = ({
         ListHeaderComponent={HeaderGridView}
         stickyHeaderIndices={[0]}
         stickyHeaderHiddenOnScroll={[0]}
-        renderItem={({ item, index, event }) => {
-          return (
-            <GridRow data={item} index={index} columnRemove={columnRemove} />
-          );
-        }}
+        renderItem={({ item, index, event }) => (
+          <GridRow data={item} index={index} columnRemove={columnRemove} />
+        )}
       />
     </Animated.View>
   );
@@ -91,9 +89,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 14,
-  },
-  labelGrid: {
-    fontSize: 16,
-    color: colors.black,
   },
 });

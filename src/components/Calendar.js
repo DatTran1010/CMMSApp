@@ -105,6 +105,7 @@ const CalendarCustom = ({
               setFocus(false);
             }}
             is24Hour={true}
+            date={new Date(date)}
           />
         </View>
       )}

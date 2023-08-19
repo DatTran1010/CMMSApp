@@ -6,7 +6,9 @@ import {
   LayoutAnimation,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import moment from "moment";
 
 import IconButton from "../../../components/IconButton";
 import CalendarCustom from "../../../components/Calendar";
@@ -15,61 +17,89 @@ import colors from "../../../Common/colors";
 import DropDown from "../../../components/DropDown";
 import { useCallback } from "react";
 import { windowHeight } from "../../../Common/dimentions";
-
+import callApi from "../../../ConText/api";
 const DetailsOEE = () => {
-  const [dateToFrom, setDateToFrom] = useState({
-    startDate: "2023-08-15",
-    endDate: "2023-08-15",
-  });
+  const dispatch = useDispatch();
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      MA_DC: "Động cơ 1",
-      MA_MAY: "ADC-001",
-      TINH_TRANG: "Bất thường",
-      LOI: "Sóng hơi cao",
-      color: "red",
-    },
-    {
-      id: 2,
-      MA_DC: "Động cơ 2",
-      MA_MAY: "ADC-002",
-      TINH_TRANG: "Bất thường",
-      LOI: "Sóng hơi cao",
-      color: "red",
-    },
-    {
-      id: 3,
-      MA_DC: "Động cơ 3",
-      MA_MAY: "ADC-003",
-      TINH_TRANG: "Bất thường",
-      LOI: "Sóng hơi cao",
-      color: "green",
-    },
-    {
-      id: 4,
-      MA_DC: "Động cơ 4",
-      MA_MAY: "ADC-004",
-      TINH_TRANG: "Bất thường",
-      LOI: "Lệch pha",
-      color: "pink",
-    },
-  ]);
+  const [dateTNgay, setDateTNgay] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
 
+  const [data, setData] = useState([{}]);
   const [dataHeader, setDataHeader] = useState([
     { id: 1, COLNAME: "Mã ĐC" },
     { id: 2, COLNAME: "Mã máy" },
     { id: 3, COLNAME: "Tình trạng" },
     { id: 4, COLNAME: "Lỗi" },
   ]);
+  const [dataTinhTrangOEE, setDataTinhTrangOEE] = useState([{}]);
 
-  const [dataTinhTrang, setDataTinhTrang] = useState([
-    { id: -1, TEN_TT: "<ALL>" },
-    { id: 1, TEN_TT: "Đạt" },
-    { id: 2, TEN_TT: "Không đạt" },
-    { id: 3, TEN_TT: "Không hoạt động" },
-  ]);
+  const [selectedError, setSelectedError] = useState();
+  //#region  get Data Combo TinhTrang\
+
+  const getDataDropdownTinhTrang = async () => {
+    const endpoint = "/api/motorwatch/tinhtrangdc";
+    const method = "GET";
+    const params = null;
+
+    const response = await callApi(
+      dispatch,
+      endpoint,
+      method,
+      null,
+      "",
+      params
+    );
+
+    if (response.status === 200) {
+      setDataTinhTrangOEE(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getDataDropdownTinhTrang();
+  }, []);
+  //#endregion
+
+  //#region  get Data lưới
+  //state
+  const [selectedTinhTrang, setSelectedTinhTrang] = useState("-1");
+
+  const getDataDetails = async () => {
+    const endpoint = "/api/motorwatch/databieudo3";
+    const method = "GET";
+    const params = {
+      iTT: selectedTinhTrang,
+      iLOI: -1,
+    };
+
+    const response = await callApi(
+      dispatch,
+      endpoint,
+      method,
+      null,
+      "",
+      params
+    );
+
+    if (response.status === 200) {
+      setData(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getDataDetails();
+  }, [selectedTinhTrang, selectedError]);
+
+  // xử lý handle load lại dữ liệu
+  const handleNgay = (date) => {
+    setDateTNgay(moment(date).format("YYYY-MM-DD"));
+  };
+
+  const handleTinhTrang = (item) => {
+    setSelectedTinhTrang(item.value);
+  };
+  //#endregion
 
   const HeaderComponent = () => {
     return (
@@ -77,7 +107,7 @@ const DetailsOEE = () => {
         <View style={styles.headerContainer}>
           <TouchableOpacity style={{ flex: 1 }}>
             <CalendarCustom
-              date={dateToFrom.startDate}
+              date={dateTNgay.startDate}
               //   setDateDNgay={setDateDNgay}
               placeholder={"Ngày"}
               mode="datetime"
@@ -87,21 +117,23 @@ const DetailsOEE = () => {
         <View style={styles.filterControl}>
           <View style={styles.fillTinhTrang}>
             <DropDown
-              data={dataTinhTrang}
-              labelField="TEN_TT"
-              valueField={"id"}
+              value={selectedTinhTrang}
+              data={dataTinhTrangOEE}
+              labelField="name"
+              valueField={"value"}
               placeholder="Tình trạng"
+              handleValue={handleTinhTrang}
             />
           </View>
           <View style={[styles.fillTinhTrang, { marginLeft: 10 }]}>
-            <DropDown
+            {/* <DropDown
               data={dataTinhTrang}
               labelField="TEN_TT"
               valueField={"id"}
               placeholder="Lỗi"
               handleValue={() => {}}
               multiselected={true}
-            />
+            /> */}
           </View>
         </View>
       </View>

@@ -8,4 +8,5 @@ export default {
   border: "#ced4da",
   backgroundColor: "#FFFFFF", //"#E5E5E5"
   gray: "#808080",
+  blackArbg: "rgba(0,0,0,0.7)",
 };

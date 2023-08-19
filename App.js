@@ -122,11 +122,11 @@ export default function App() {
                 options={{ headerShown: true }}
               /> */}
 
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="Chi tiết tình trạng động cơ"
                 component={DetailsEngineState}
                 options={{ headerShown: true }}
-              /> */}
+              />
 
               {/* <Stack.Screen
                 name="Chi tiết OEE"
@@ -134,11 +134,11 @@ export default function App() {
                 options={{ headerShown: true }}
               /> */}
 
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="TreeList"
                 component={TreeList}
                 options={{ headerShown: true }}
-              />
+              /> */}
 
               {/* <Stack.Screen
                                 name="Visuak"

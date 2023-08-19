@@ -9,7 +9,7 @@ export default StyleSheet.create({
     height: windowHeight,
     backgroundColor: colors.backgroundColor,
   },
-  theme: {
+  shadown: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,

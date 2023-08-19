@@ -1,48 +1,25 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import moment from "moment";
+
 import colors from "../../../Common/colors";
 import CalendarComponent from "../../../components/CalendarComponent";
 import IconButton from "../../../components/IconButton";
 import { windowHeight, windowWidth } from "../../../Common/dimentions";
 import CalendarCustom from "../../../components/Calendar";
 import GridViewComponent from "../../../components/GridViewConsumtion";
+import callApi from "../../../ConText/api";
+import { useEffect } from "react";
 
 const DetailsConsumtion = () => {
-  const [dateToFrom, setDateToFrom] = useState({
-    startDate: "2023-08-15",
-    endDate: "2023-08-15",
-  });
+  const [dateTNgay, setDateTNgay] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      MA_DC: "DC-00001",
-      MA_MAY: "DAC-002",
-      CONG_XUAT: "85/105/57",
-      TONG_TIEU_HAO: "405/62.3/6.5",
-    },
-    {
-      id: 2,
-      MA_DC: "DC-00002",
-      MA_MAY: "DAC-003",
-      CONG_XUAT: "85/105/57",
-      TONG_TIEU_HAO: "405/62.3/6.5",
-    },
-    {
-      id: 3,
-      MA_DC: "DC-00003",
-      MA_MAY: "DAC-004",
-      CONG_XUAT: "85/105/57",
-      TONG_TIEU_HAO: "405/62.3/6.5",
-    },
-    {
-      id: 4,
-      MA_DC: "DC-00005",
-      MA_MAY: "DAC-005",
-      CONG_XUAT: "85/105/57",
-      TONG_TIEU_HAO: "405/62.3/6.5",
-    },
-  ]);
+  const dispatch = useDispatch();
+
+  const [data, setData] = useState([{}]);
 
   const [dataHeader, setDataHeader] = useState([
     { id: 1, COLNAME: "Mã động cơ" },
@@ -50,15 +27,46 @@ const DetailsConsumtion = () => {
     { id: 1, COLNAME: "Công suất,kW" },
     { id: 1, COLNAME: "Tổng tiêu hao,kWh" },
   ]);
+
+  const getData = async () => {
+    const endpoint = "/api/motorwatch/databieudo1";
+    const method = "GET";
+    const params = {
+      dNgay: dateTNgay,
+    };
+
+    const response = await callApi(
+      dispatch,
+      endpoint,
+      method,
+      null,
+      "",
+      params
+    );
+
+    if (response.status === 200) {
+      setData(response.data);
+    }
+  };
+
+  const handleNgay = (date) => {
+    setDateTNgay(moment(date).format("YYYY-MM-DD"));
+  };
+
+  useEffect(() => {
+    getData();
+  }, [dateTNgay]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContainer}>
           <TouchableOpacity style={{ flex: 1 }}>
             <CalendarCustom
-              date={dateToFrom.startDate}
+              date={dateTNgay}
               //   setDateDNgay={setDateDNgay}
               placeholder={"Ngày"}
+              setDateDNgay={handleNgay}
             />
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: "flex-end" }}>
@@ -75,7 +83,7 @@ const DetailsConsumtion = () => {
         <GridViewComponent
           data={data}
           dataHeader={dataHeader}
-          columnRemove={{ id: true }}
+          // columnRemove={{ id: true }}
         />
       </View>
 

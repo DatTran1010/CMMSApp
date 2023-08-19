@@ -130,37 +130,39 @@ const Consumption = ({ navigation }) => {
             />
           )}
         </View>
-        {data.some((item) => Object.keys(item).length > 0) ? (
+        {data && data.some((item) => Object.keys(item).length > 0) ? (
           <ConsumtionChart data={data} />
         ) : (
           <></>
         )}
 
-        <View style={styles.legendContainer}>
-          <View style={styles.legendContent}>
-            <View
-              style={[
-                styles.iconLegend,
-                {
-                  backgroundColor: data[0].colorTONG_TH,
-                },
-              ]}
-            ></View>
-            <Text style={styles.textLegend}>Tổng tiêu hao điện năng</Text>
-          </View>
+        {data && data.some((item) => Object.keys(item).length > 0) && (
+          <View style={styles.legendContainer}>
+            <View style={styles.legendContent}>
+              <View
+                style={[
+                  styles.iconLegend,
+                  {
+                    backgroundColor: data[0].colorTONG_TH,
+                  },
+                ]}
+              ></View>
+              <Text style={styles.textLegend}>Tổng tiêu hao điện năng</Text>
+            </View>
 
-          <View style={styles.legendContent}>
-            <View
-              style={[
-                styles.iconLegend,
-                {
-                  backgroundColor: data[0].colorTONG_CX,
-                },
-              ]}
-            ></View>
-            <Text style={styles.textLegend}>Tổng công xuất</Text>
+            <View style={styles.legendContent}>
+              <View
+                style={[
+                  styles.iconLegend,
+                  {
+                    backgroundColor: data[0].colorTONG_CX,
+                  },
+                ]}
+              ></View>
+              <Text style={styles.textLegend}>Tổng công xuất</Text>
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </View>
   );
