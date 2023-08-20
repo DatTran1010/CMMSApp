@@ -20,61 +20,61 @@ import Maintenance from "./src/UI/BaoTri";
 import Monitor from "./src/UI/GiamSat";
 import MyMotorWatch from "./src/UI/VanHanhMay";
 import DetailsConsumtion from "./src/UI/VanHanhMay/TieuHao/DetailsConsumtion";
+import TreeList from "./src/components/TreeList";
 import DetailsEngineState from "./src/UI/VanHanhMay/EngineState/DetailsEngineState";
 import DetailsOEE from "./src/UI/VanHanhMay/OEE/DetailsOEE";
-import TreeList from "./src/components/TreeList";
 
 export default function App() {
-  const Stack = createStackNavigator();
-  const Drawer = createDrawerNavigator();
+    const Stack = createStackNavigator();
+    const Drawer = createDrawerNavigator();
 
-  //Draw chung cho tất cả
-  const DrawerNavigator = () => {
-    return (
-      <Drawer.Navigator drawerContent={(props) => DrawerContent(props)}>
-        <Stack.Screen
-          name="Home"
-          component={StackNavigator}
-          options={{
-            title: "Home",
-            headerShown: false,
-            drawerIcon: true,
-          }}
-        />
-      </Drawer.Navigator>
-    );
-  };
+    //Draw chung cho tất cả
+    const DrawerNavigator = () => {
+        return (
+            <Drawer.Navigator drawerContent={(props) => DrawerContent(props)}>
+                <Stack.Screen
+                    name="Home"
+                    component={StackNavigator}
+                    options={{
+                        title: "Home",
+                        headerShown: false,
+                        drawerIcon: true,
+                    }}
+                />
+            </Drawer.Navigator>
+        );
+    };
 
-  function StackNavigator() {
-    return (
-      <Stack.Navigator defaultScreenOptions={Home}>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: true, title: "My Ecomaint" }}
-        />
-        <Stack.Screen
-          name="Visual"
-          component={Visual}
-          options={{ headerShown: true }}
-        />
-      </Stack.Navigator>
-    );
-  }
-  return (
-    <Provider store={store}>
-      <ConTextProvider>
-        <View
-          style={{
-            flex: 1,
-          }}
-          // onStartShouldSetResponder={() => {
-          //     Keyboard.dismiss();
-          // }}
-        >
-          <NavigationContainer>
+    function StackNavigator() {
+        return (
             <Stack.Navigator defaultScreenOptions={Home}>
-              {/* <Stack.Screen
+                <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={{ headerShown: true, title: "My Ecomaint" }}
+                />
+                <Stack.Screen
+                    name="Visual"
+                    component={Visual}
+                    options={{ headerShown: true }}
+                />
+            </Stack.Navigator>
+        );
+    }
+    return (
+        <Provider store={store}>
+            <ConTextProvider>
+                <View
+                    style={{
+                        flex: 1,
+                    }}
+                    // onStartShouldSetResponder={() => {
+                    //     Keyboard.dismiss();
+                    // }}
+                >
+                    <NavigationContainer>
+                        <Stack.Navigator defaultScreenOptions={Home}>
+                            {/* <Stack.Screen
                 name="Login"
                 component={Login}
                 options={{
@@ -104,54 +104,54 @@ export default function App() {
                 component={Monitor}
                 options={{ headerShown: true }}
               /> */}
-              {/* <Stack.Screen
+                            {/* <Stack.Screen
                 name="DeviceMove"
                 component={DeviceMove}
                 options={{ headerShown: true }}
               /> */}
 
-              {/* <Stack.Screen
-                name="MyMotorWatch"
-                component={MyMotorWatch}
-                options={{ headerShown: true }}
-              /> */}
+                            <Stack.Screen
+                                name="MyMotorWatch"
+                                component={MyMotorWatch}
+                                options={{ headerShown: true }}
+                            />
 
-              {/* <Stack.Screen
+                            {/* <Stack.Screen
                 name="Chi tiết tiêu hao"
                 component={DetailsConsumtion}
                 options={{ headerShown: true }}
               /> */}
 
-              <Stack.Screen
-                name="Chi tiết tình trạng động cơ"
-                component={DetailsEngineState}
-                options={{ headerShown: true }}
-              />
+                            {/* <Stack.Screen
+                                name="Chi tiết tình trạng động cơ"
+                                component={DetailsEngineState}
+                                options={{ headerShown: true }}
+                            /> */}
 
-              {/* <Stack.Screen
-                name="Chi tiết OEE"
-                component={DetailsOEE}
-                options={{ headerShown: true }}
-              /> */}
+                            {/* <Stack.Screen
+                                name="Chi tiết OEE"
+                                component={DetailsOEE}
+                                options={{ headerShown: true }}
+                            /> */}
 
-              {/* <Stack.Screen
-                name="TreeList"
-                component={TreeList}
-                options={{ headerShown: true }}
-              /> */}
+                            {/* <Stack.Screen
+                                name="TreeList"
+                                component={TreeList}
+                                options={{ headerShown: true }}
+                            /> */}
 
-              {/* <Stack.Screen
+                            {/* <Stack.Screen
                                 name="Visuak"
                                 component={Visual}
                                 options={{ headerShown: true }}
                             /> */}
-            </Stack.Navigator>
-          </NavigationContainer>
-          <ModalUser />
-          <Overlay />
-          <Toast />
-        </View>
-      </ConTextProvider>
-    </Provider>
-  );
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                    <ModalUser />
+                    <Overlay />
+                    <Toast />
+                </View>
+            </ConTextProvider>
+        </Provider>
+    );
 }

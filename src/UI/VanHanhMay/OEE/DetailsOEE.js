@@ -4,9 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
-  ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 
@@ -15,26 +14,45 @@ import CalendarCustom from "../../../components/Calendar";
 import GridViewComponent from "../../../components/GridViewConsumtion";
 import colors from "../../../Common/colors";
 import DropDown from "../../../components/DropDown";
-import { useCallback } from "react";
-import { windowHeight } from "../../../Common/dimentions";
 import callApi from "../../../ConText/api";
-const DetailsOEE = () => {
+import { useEffect } from "react";
+
+const DetailsEngineState = () => {
   const dispatch = useDispatch();
 
   const [dateTNgay, setDateTNgay] = useState(
     moment(new Date()).format("YYYY-MM-DD")
   );
 
-  const [data, setData] = useState([{}]);
-  const [dataHeader, setDataHeader] = useState([
-    { id: 1, COLNAME: "Mã ĐC" },
-    { id: 2, COLNAME: "Mã máy" },
-    { id: 3, COLNAME: "Tình trạng" },
-    { id: 4, COLNAME: "Lỗi" },
-  ]);
-  const [dataTinhTrangOEE, setDataTinhTrangOEE] = useState([{}]);
+  const [isAscending, setIsAscending] = useState(false);
 
-  const [selectedError, setSelectedError] = useState();
+  const [data, setData] = useState([{}]);
+
+  const [dataHeader, setDataHeader] = useState([
+    { id: 1, COLNAME: "Mã máy" },
+    { id: 2, COLNAME: "OEE% (Ngày)" },
+    { id: 3, COLNAME: "OEE mục tiêu" },
+    { id: 4, COLNAME: "% đạt" },
+    { id: 5, COLNAME: "OEE% (7 ngày)" },
+  ]);
+
+  const [dataTinhTrang, setDataTinhTrang] = useState([{}]);
+
+  const handleSort = () => {
+    const columnToSortBy = "DAT";
+
+    const newData = [...data].sort((a, b) => {
+      if (isAscending) {
+        return a.DAT - b.DAT; // Sort ascending
+      } else {
+        return b.DAT - a.DAT; // Sort descending
+      }
+    });
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setData(newData);
+    setIsAscending(!isAscending);
+  };
+
   //#region  get Data Combo TinhTrang\
 
   const getDataDropdownTinhTrang = async () => {
@@ -52,7 +70,7 @@ const DetailsOEE = () => {
     );
 
     if (response.status === 200) {
-      setDataTinhTrangOEE(response.data);
+      setDataTinhTrang(response.data);
     }
   };
 
@@ -62,15 +80,16 @@ const DetailsOEE = () => {
   //#endregion
 
   //#region  get Data lưới
+
   //state
   const [selectedTinhTrang, setSelectedTinhTrang] = useState("-1");
 
   const getDataDetails = async () => {
-    const endpoint = "/api/motorwatch/databieudo3";
+    const endpoint = "/api/motorwatch/databieudo2";
     const method = "GET";
     const params = {
-      iTT: selectedTinhTrang,
-      iLOI: -1,
+      dNgay: dateTNgay,
+      iITOEE: selectedTinhTrang,
     };
 
     const response = await callApi(
@@ -89,7 +108,7 @@ const DetailsOEE = () => {
 
   useEffect(() => {
     getDataDetails();
-  }, [selectedTinhTrang, selectedError]);
+  }, [dateTNgay, selectedTinhTrang]);
 
   // xử lý handle load lại dữ liệu
   const handleNgay = (date) => {
@@ -101,52 +120,39 @@ const DetailsOEE = () => {
   };
   //#endregion
 
-  const HeaderComponent = () => {
-    return (
+  return (
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContainer}>
           <TouchableOpacity style={{ flex: 1 }}>
             <CalendarCustom
-              date={dateTNgay.startDate}
+              date={dateTNgay}
               //   setDateDNgay={setDateDNgay}
               placeholder={"Ngày"}
-              mode="datetime"
+              setDateDNgay={handleNgay}
             />
           </TouchableOpacity>
-        </View>
-        <View style={styles.filterControl}>
-          <View style={styles.fillTinhTrang}>
-            <DropDown
-              value={selectedTinhTrang}
-              data={dataTinhTrangOEE}
-              labelField="name"
-              valueField={"value"}
-              placeholder="Tình trạng"
-              handleValue={handleTinhTrang}
-            />
-          </View>
-          <View style={[styles.fillTinhTrang, { marginLeft: 10 }]}>
-            {/* <DropDown
-              data={dataTinhTrang}
-              labelField="TEN_TT"
-              valueField={"id"}
-              placeholder="Lỗi"
-              handleValue={() => {}}
-              multiselected={true}
-            /> */}
+          <View style={{ flex: 1, alignItems: "flex-end", marginLeft: 10 }}>
+            <View style={{ flex: 1, width: "100%" }}>
+              <DropDown
+                data={dataTinhTrang}
+                labelField="name"
+                valueField={"value"}
+                placeholder="Tình trạng"
+                handleValue={handleTinhTrang}
+                value={selectedTinhTrang}
+              />
+            </View>
           </View>
         </View>
       </View>
-    );
-  };
-  return (
-    <View style={styles.container}>
+
       <View style={styles.body}>
         <GridViewComponent
           data={data}
           dataHeader={dataHeader}
-          columnRemove={{ id: true, color: true }}
-          HeaderComponent={HeaderComponent}
+          columnRemove={{ id: true, tt: true }}
+          onSortTable={handleSort}
         />
       </View>
 
@@ -155,7 +161,7 @@ const DetailsOEE = () => {
   );
 };
 
-export default DetailsOEE;
+export default DetailsEngineState;
 
 const styles = StyleSheet.create({
   container: {
@@ -168,25 +174,17 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
+    flex: 1,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
   },
 
   body: {
     marginVertical: 10,
+
     backgroundColor: colors.white,
-    flex: 1,
+    flex: 15,
   },
   footer: {},
-  filterControl: {
-    marginVertical: 15,
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  fillTinhTrang: {
-    flex: 1,
-  },
 });
