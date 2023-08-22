@@ -1,15 +1,15 @@
 import {
-  View,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Platform,
+    View,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    Platform,
 } from "react-native";
 import React, { useMemo, useRef, useCallback } from "react";
 import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetModalProvider,
+    BottomSheetBackdrop,
+    BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import { useDispatch } from "react-redux";
 
@@ -24,198 +24,223 @@ import callApi from "../../ConText/api";
 import { useEffect } from "react";
 
 const MyMotorWatch = ({ navigation }) => {
-  const dispatch = useDispatch();
-  // ref
-  const bottomSheetRef = useRef(BottomSheet);
+    const dispatch = useDispatch();
+    // ref
+    const bottomSheetRef = useRef(BottomSheet);
 
-  // variables
-  const snapPoints = useMemo(
-    () => [Platform.OS === "ios" ? "10%" : "7%", "50%", "75%"],
-    []
-  );
-
-  // callbacks
-  const handleSheetChanges = useCallback((index) => {
-    // console.log("handleSheetChanges", index);
-  }, []);
-
-  const CustomHandleComponent = () => {
-    return (
-      <TouchableOpacity
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          height: 40,
-        }}
-        activeOpacity={0.7}
-        onPress={() => {
-          bottomSheetRef.current.snapToIndex(2);
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: colors.blackArbg,
-            width: 30,
-            height: 5,
-            borderRadius: 5,
-          }}
-        ></View>
-      </TouchableOpacity>
+    // variables
+    const snapPoints = useMemo(
+        () => [Platform.OS === "ios" ? "10%" : "7%", "50%", "75%"],
+        []
     );
-  };
 
-  //#region  load data tree nha` may'
-  const [dataTreeNM, setDataTreeNM] = useState([{}]);
+    // callbacks
+    const handleSheetChanges = useCallback((index) => {
+        // console.log("handleSheetChanges", index);
+    }, []);
 
-  const getDataTreeNM = async () => {
-    const endpoint = "/api/motorwatch/treeNhaMay";
-    const method = "GET";
-    const params = {
-      UserName: "admin",
+    const CustomHandleComponent = () => {
+        return (
+            <TouchableOpacity
+                style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 40,
+                }}
+                activeOpacity={0.7}
+                onPress={() => {
+                    bottomSheetRef.current.snapToIndex(2);
+                }}
+            >
+                <View
+                    style={{
+                        backgroundColor: colors.blackArbg,
+                        width: 30,
+                        height: 5,
+                        borderRadius: 5,
+                    }}
+                ></View>
+            </TouchableOpacity>
+        );
     };
 
-    const response = await callApi(
-      dispatch,
-      endpoint,
-      method,
-      null,
-      "",
-      params
-    );
+    //#region  load data tree nha` may'
+    const [dataTreeNM, setDataTreeNM] = useState([{}]);
 
-    if (response.status === 200) {
-      setDataTreeNM(response.data);
-    }
-  };
+    const getDataTreeNM = async () => {
+        const endpoint = "/api/motorwatch/treeNhaMay";
+        const method = "GET";
+        const params = {
+            UserName: "admin",
+        };
 
-  useEffect(() => {
-    getDataTreeNM();
-  }, []);
+        const response = await callApi(
+            dispatch,
+            endpoint,
+            method,
+            null,
+            "",
+            params
+        );
 
-  //#endregion
-
-  function updateCheckedData(data, targetIds, checkValue) {
-    const newData = [...data];
-    for (let item of newData) {
-      if (targetIds.includes(item.id)) {
-        item.check = !checkValue;
-      }
-
-      for (const key in item) {
-        if (Array.isArray(item[key])) {
-          updateCheckedData(item[key], targetIds, checkValue);
+        if (response.status === 200) {
+            setDataTreeNM(response.data);
         }
-      }
-    }
+    };
 
-    // const allChildrenUnchecked = itemNew[key].every(
-    //   (child) => child.check === false
-    // );
+    useEffect(() => {
+        getDataTreeNM();
+    }, []);
 
-    return newData;
-  }
+    //#endregion
 
-  function findParentAndDescendants(items, targetId, parents = []) {
-    for (let item of items) {
-      if (item.id === targetId) {
-        const descendants = getDescendantIds(item);
-        return parents.concat([item.id, ...descendants]);
-      }
+    function updateCheckedData(data, targetIds, checkValue) {
+        // const newData = [...data];
+        for (let item of data) {
+            if (targetIds.includes(item.id)) {
+                item.check = !checkValue;
+            }
 
-      for (const key in item) {
-        if (Array.isArray(item[key])) {
-          const res = findParentAndDescendants(
-            item[key],
-            targetId,
-            parents.concat(item.id)
-          );
-          if (res.length > 0) {
-            return res;
-          }
+            for (const key in item) {
+                if (Array.isArray(item[key])) {
+                    updateCheckedData(item[key], targetIds, checkValue);
+                }
+            }
         }
-      }
+        return data;
     }
-    return [];
-  }
 
-  function getDescendantIds(item) {
-    let descendantIds = [];
+    function findParentAndDescendants(items, targetId, parents = []) {
+        for (let item of items) {
+            if (item.id === targetId) {
+                const descendants = getDescendantIds(item);
+                return parents.concat([item.id, ...descendants]);
+            }
 
-    for (const key in item) {
-      if (Array.isArray(item[key])) {
-        for (let subItem of item[key]) {
-          if (typeof subItem === "object") {
-            descendantIds.push(subItem.id);
-            descendantIds = descendantIds.concat(getDescendantIds(subItem));
-          }
+            for (const key in item) {
+                if (Array.isArray(item[key])) {
+                    const res = findParentAndDescendants(
+                        item[key],
+                        targetId,
+                        parents.concat(item.id)
+                    );
+                    if (res.length > 0) {
+                        return res;
+                    }
+                }
+            }
         }
-      }
+        return [];
     }
 
-    return descendantIds;
-  }
+    function getDescendantIds(item) {
+        let descendantIds = [];
 
-  const handleCheckedLisItem = (item) => {
-    // const newData = updateCheckedChildren(item);
-    // updateCheckedChildren(item);
-    // Cập nhật trạng thái check trong dataTreeNM
-    // setDataTreeNM([...dataTreeNM]);
-    // console.log(newData);
-    // setDataTreeNM([updatedTreeData]);
-    // console.log(updatedTreeData);
-    const result = findParentAndDescendants(dataTreeNM, item.id);
-    const newData = updateCheckedData(dataTreeNM, result, item.check);
-    console.log(newData);
-    setDataTreeNM([...newData]);
-  };
+        for (const key in item) {
+            if (Array.isArray(item[key])) {
+                for (let subItem of item[key]) {
+                    if (typeof subItem === "object") {
+                        descendantIds.push(subItem.id);
+                        descendantIds = descendantIds.concat(
+                            getDescendantIds(subItem)
+                        );
+                    }
+                }
+            }
+        }
 
-  return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <ScrollView style={styles.container}>
-          <Consumption navigation={navigation} />
-          <EngineState navigation={navigation} />
-          <OEEMain navigation={navigation} />
-        </ScrollView>
-        <BottomSheetModalProvider>
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            backdropComponent={BottomSheetBackdrop}
-            handleComponent={CustomHandleComponent}
-            // enablePanDownToClose={true}
-            onClose={() => {
-              bottomSheetRef.current.snapToIndex(0);
-            }}
-            enableContentPanningGesture={Platform.OS === "ios" ? true : false}
-          >
-            <View
-              style={{
-                flex: 1,
-                margin: 20,
-                height: windowHeight / 2,
-              }}
-            >
-              <TreeList
-                data={dataTreeNM}
-                handleCheckedLisItem={handleCheckedLisItem}
-              />
+        return descendantIds;
+    }
+
+    const checkAndUpdateData = (data, targetIds) => {
+        let updatedData = [...data]; // Create a copy of the data
+        let allChecked = true;
+
+        for (const item of updatedData) {
+            for (const xu of item.dataXuong) {
+                for (const may of xu.dataMay) {
+                    for (const dc of may.dataDongCo) {
+                        if (targetIds.includes(dc.id)) {
+                            if (!dc.check) {
+                                allChecked = false;
+                            }
+                        }
+                    }
+                    if (allChecked) {
+                        may.check = true;
+                        xu.check = true;
+                    }
+                }
+                if (allChecked) {
+                    xu.check = true;
+                }
+            }
+        }
+
+        return updatedData;
+    };
+
+    const handleCheckedLisItem = (item) => {
+        // updateCheckedChildren(item);
+        // //Cập nhật trạng thái check trong dataTreeNM
+        // setDataTreeNM([...dataTreeNM]);
+
+        const result = findParentAndDescendants(dataTreeNM, item.id);
+
+        const newData = updateCheckedData(dataTreeNM, result, item.check);
+
+        setDataTreeNM([...dataTreeNM]);
+    };
+
+    return (
+        <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
+                {/* <ScrollView style={styles.container}>
+                    <Consumption navigation={navigation} />
+                    <EngineState navigation={navigation} />
+                    <OEEMain navigation={navigation} />
+                </ScrollView> */}
+                <BottomSheetModalProvider>
+                    <BottomSheet
+                        ref={bottomSheetRef}
+                        index={0}
+                        snapPoints={snapPoints}
+                        onChange={handleSheetChanges}
+                        backdropComponent={BottomSheetBackdrop}
+                        handleComponent={CustomHandleComponent}
+                        // enablePanDownToClose={true}
+                        onClose={() => {
+                            bottomSheetRef.current.snapToIndex(0);
+                        }}
+                        enableContentPanningGesture={
+                            Platform.OS === "ios" ? true : false
+                        }
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                margin: 20,
+                                height: windowHeight / 2,
+                            }}
+                        >
+                            <TreeList
+                                data={dataTreeNM}
+                                handleCheckedLisItem={handleCheckedLisItem}
+                            />
+                        </View>
+                    </BottomSheet>
+                </BottomSheetModalProvider>
             </View>
-          </BottomSheet>
-        </BottomSheetModalProvider>
-      </View>
-    </View>
-  );
+        </View>
+    );
 };
 
 export default MyMotorWatch;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.backgroundColor,
-    padding: 10,
-    marginBottom: 20,
-  },
+    container: {
+        backgroundColor: colors.backgroundColor,
+        padding: 10,
+        marginBottom: 20,
+    },
 });

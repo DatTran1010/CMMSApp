@@ -16,8 +16,9 @@ import GridViewComponent from "../../../components/GridViewConsumtion";
 import colors from "../../../Common/colors";
 import DropDown from "../../../components/DropDown";
 import { useCallback } from "react";
-import { windowHeight } from "../../../Common/dimentions";
+import { heightTextInput, windowHeight } from "../../../Common/dimentions";
 import callApi from "../../../ConText/api";
+import DropDownCustom from "../../../components/DropDownCustom";
 const DetailsEngineState = () => {
     const dispatch = useDispatch();
 
@@ -147,14 +148,15 @@ const DetailsEngineState = () => {
                         />
                     </View>
                     <View style={[styles.fillTinhTrang, { marginLeft: 10 }]}>
-                        <DropDown
+                        {/* <DropDown
                             data={dataTinhTrangLoi}
                             labelField="name"
                             valueField={"value"}
                             placeholder="Lỗi"
                             handleValue={() => {}}
                             multiselected={true}
-                        />
+                        /> */}
+                        <DropDownCustom label="Lỗi" />
                     </View>
                 </View>
             </View>

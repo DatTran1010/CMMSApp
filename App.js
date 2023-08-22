@@ -23,6 +23,7 @@ import DetailsConsumtion from "./src/UI/VanHanhMay/TieuHao/DetailsConsumtion";
 import TreeList from "./src/components/TreeList";
 import DetailsEngineState from "./src/UI/VanHanhMay/EngineState/DetailsEngineState";
 import DetailsOEE from "./src/UI/VanHanhMay/OEE/DetailsOEE";
+import DropDownCustom from "./src/components/DropDownCustom";
 
 export default function App() {
     const Stack = createStackNavigator();
@@ -110,23 +111,27 @@ export default function App() {
                 options={{ headerShown: true }}
               /> */}
 
-                            <Stack.Screen
+                            {/* <Stack.Screen
                                 name="MyMotorWatch"
                                 component={MyMotorWatch}
                                 options={{ headerShown: true }}
-                            />
-
+                            /> */}
+                            {/* <Stack.Screen
+                                name="DropDownCustom"
+                                component={DropDownCustom}
+                                options={{ headerShown: true }}
+                            /> */}
                             {/* <Stack.Screen
                 name="Chi tiết tiêu hao"
                 component={DetailsConsumtion}
                 options={{ headerShown: true }}
               /> */}
 
-                            {/* <Stack.Screen
+                            <Stack.Screen
                                 name="Chi tiết tình trạng động cơ"
                                 component={DetailsEngineState}
                                 options={{ headerShown: true }}
-                            /> */}
+                            />
 
                             {/* <Stack.Screen
                                 name="Chi tiết OEE"
